@@ -3,6 +3,7 @@ import Product from './Product';
 
 export default function Products(props) {
   let products = productsList.arrayOfProducts
+  
   return(
     <div className="container">
       <div className="row">
