@@ -1,11 +1,22 @@
 import { Link, Switch, BrowserRouter as Router, Route } from "react-router-dom";
-import About from "./pages/About";
-import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
-import Products from "./pages/Products";
-import Register from "./pages/Register";
+import { useContext } from "react";
+import About from "./About";
+import Home from "./Home.jsx";
+import Login from "./Login.jsx";
+import Products from "./Products";
+import Register from "./Register";
+import { AuthContext } from "../App";
+
 
 function Header() {
+
+  function logout() {
+    setTimeout(() => {
+      updateStatus(false)
+    }, 2000);
+  }
+
+  const {authStatus, updateStatus} = useContext(AuthContext);
   
   return (
     <div className="App">
@@ -24,24 +35,15 @@ function Header() {
                 <span className="badge bg-danger rounded-pill position-absolute top-0 start-100 fst-normal">4</span>
               </i>
             </button>
-            <Link to="/login" className="btn btn-primary mx-2">Sign In</Link>
+            { authStatus && <button onClick={logout} className="btn btn-primary mx-2">Sign out</button> }
+            { !authStatus && <Link to="/login" className="btn btn-primary mx-2">Sign In</Link> }
         </nav>
         <Switch>
-          <Route exact path="/">
-            <Home/>
-          </Route>
-          <Route path="/products">
-            <Products/>
-          </Route>
-          <Route path="/about">
-            <About/>
-          </Route>
-          <Route path="/login">
-            <Login/>
-          </Route>
-          <Route path="/register">
-            <Register/>
-          </Route>
+          <Route exact path="/" component={Home}/>
+          <Route path="/products" component={Products}/>
+          <Route path="/about" component={About}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/register" component={Register}/>
         </Switch>
       </Router>
     </div>
