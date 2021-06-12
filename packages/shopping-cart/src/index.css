@@ -26,6 +26,25 @@ code {
   transform: translate(-50%, -50%);
 }
 
+img {
+  width: 100%;
+}
+
+table th, table tr {
+  text-align: center; 
+}
+
+.row{
+  overflow-y: scroll;
+  height: 640px;
+
+}
+
+.table-wrapper {
+  max-height: 640px;
+  overflow: auto;
+}
+
 /* .overlay {
   background-color: #EFEFEF;
   position: absolute;

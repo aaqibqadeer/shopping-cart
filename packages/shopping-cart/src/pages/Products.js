@@ -9,8 +9,8 @@ export default function Products(props) {
   return(
     <div className="container">
       <div className="row">
-        {productsList.arrayOfProducts.map((product, index) =>
-          <Product product={product} key={index} authStatus={authStatus}/>
+        {productsList.arrayOfProducts.map((product) =>
+          <Product product={product} key={product.id} id={product.id} authStatus={authStatus}/>
         )}
       </div>
     </div>
