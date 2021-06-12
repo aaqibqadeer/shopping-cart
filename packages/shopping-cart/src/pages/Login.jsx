@@ -1,4 +1,4 @@
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useReducer, useContext } from "react";
 import InputField from '../components/InputField';
 import { AuthContext } from "../App";
