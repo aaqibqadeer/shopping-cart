@@ -36,14 +36,14 @@ export default function Register(props) {
       }, 2000);
     } 
     else {
-      alert("Wrong Credentials");
+      alert("Passwords does not match");
     }
   }
 
   return(
     <div className="bg-light p-5 my-5 col-5 mx-auto border border-2">
       <h3 className="text-center mb-4">Create your account</h3>
-      <form className="" onSubmit={handleSubmit}>
+      <form className="needs-validation" onSubmit={handleSubmit}>
         <InputField name="name" label="Name:" type="text" placeholder="Enter your name" value={formObject.name}  onValueChange={handleChange} />
         <InputField name="email" label="Email:" type="email" placeholder="Enter email address" value={formObject.email}  onValueChange={handleChange} />
         <InputField name="password" label="Password:" type="password" placeholder="Enter password" value={formObject.password}  onValueChange={handleChange} />
