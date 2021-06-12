@@ -5,18 +5,22 @@ import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 import Products from "./Products";
 import Register from "./Register";
-import { AuthContext } from "../App";
+import { AuthContext, LoadingContext } from "../App";
+
 
 
 function Header() {
 
   function logout() {
+    updateLoading(true)
     setTimeout(() => {
+      updateLoading(false)
       updateStatus(false)
     }, 2000);
   }
 
   const {authStatus, updateStatus} = useContext(AuthContext);
+  const {isLoading, updateLoading} = useContext(LoadingContext);
   
   return (
     <div className="App">

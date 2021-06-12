@@ -1,11 +1,12 @@
 import {Link} from 'react-router-dom';
 import { useContext, useReducer } from "react";
 import InputField from '../components/InputField';
-import { UsersContext } from "../App";
+import { UsersContext, LoadingContext } from "../App";
 
 export default function Register(props) {
   
   const {users, addUser} = useContext(UsersContext);
+  const {isLoading, updateLoading} = useContext(LoadingContext);
   const [formObject, setFormObject] = useReducer(formReducer, {name:"", email:"", password:"", confirmPassword:""});
   
   function formReducer(state, event) {
@@ -27,9 +28,11 @@ export default function Register(props) {
   function handleSubmit(event) {
     event.preventDefault();
     if(validUser()) {
+      updateLoading(true)
       setTimeout(() => {
-        alert("New account created successfull!")
+        updateLoading(false);
         addUser({name:formObject.name, email:formObject.email, password:formObject.password})
+        alert("New account created successfull!")
       }, 2000);
     } 
     else {

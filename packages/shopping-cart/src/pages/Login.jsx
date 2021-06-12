@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useReducer, useContext } from "react";
 import InputField from '../components/InputField';
-import { AuthContext } from "../App";
-import { UsersContext } from "../App";
+import { AuthContext, UsersContext, LoadingContext } from "../App";
 
 export default function Login(props) {
 
   const {authStatus, updateStatus} = useContext(AuthContext);
+  const {isLoading, updateLoading} = useContext(LoadingContext);
   const {users, addUser} = useContext(UsersContext);
 
   function formReducer(state, event) {
@@ -28,15 +28,18 @@ export default function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    updateLoading(true);
     if(userExists()) {
       setTimeout(() => {
-        alert("Login Successfull!")
+        updateLoading(false);
+        // alert("Login Successfull!")
         updateStatus(true);
         props.history.replace("/");
         
       }, 2000);
     } 
     else {
+      updateLoading(false);
       alert("Wrong Credentials");
     }
   }
