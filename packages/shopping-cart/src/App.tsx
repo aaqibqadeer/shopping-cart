@@ -1,6 +1,8 @@
 import React from "react";
+import { BrowserRouter as Router} from "react-router-dom";
 import { useState } from "react";
 import { Header } from "./pages/Header.jsx";
+import { Routes } from "./components/Routes";
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
@@ -47,7 +49,10 @@ export default function App() {
         <LoadingContext.Provider value={{ isLoading, updateLoading }}>
           <UsersContext.Provider value={{users, addUser}}>
             <AuthContext.Provider value={{authStatus, updateStatus}}>
-                <Header/>
+                <Router>
+                  <Header/>
+                  <Routes/>
+                </Router>
             </AuthContext.Provider>
           </UsersContext.Provider>
         </LoadingContext.Provider>
