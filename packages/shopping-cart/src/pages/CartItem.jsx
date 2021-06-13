@@ -1,4 +1,4 @@
-function CartItem(props) {
+export function CartItem(props) {
 
   function handleQuantity(event) {
     props.handleQuantity(event.target.value, props.product.id)
@@ -20,5 +20,3 @@ function CartItem(props) {
     </tr>
   )
 }
-
-export default CartItem;

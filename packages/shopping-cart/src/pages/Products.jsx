@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import productsList from '../products.json';
-import Product from './Product';
+import { Product } from './Product';
 import { AuthContext } from "../App";
 
-export default function Products(props) {
+export function Products(props) {
   const {authStatus, updateStatus} = useContext(AuthContext);
   
   return(

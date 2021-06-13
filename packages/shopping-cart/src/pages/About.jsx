@@ -1,6 +1,6 @@
-export default function About(props) {
-  return(
-    
+export function About(props) {
+
+  return(  
     <div className="container">
       <div className="p-5 mt-5 bg-light rounded-3">
         <h1 className="fw-bold">About Page</h1>

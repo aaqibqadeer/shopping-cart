@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import {CartContext} from "../App";
+import { CartContext } from "../App";
 
-export default function Product(props) {
+export function Product(props) {
 
   const {cart, addToCart, updateCart} = useContext(CartContext);
   const [isAddedToCart, setIsAddedToCart] = useState(false);

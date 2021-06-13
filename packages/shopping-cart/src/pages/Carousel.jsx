@@ -1,4 +1,4 @@
-export default function Carousel(props) {
+export function Carousel(props) {
   return (
     <div id="carouselExampleDark" className="carousel carousel-dark slide" data-bs-ride="carousel">
       <div className="carousel-indicators">

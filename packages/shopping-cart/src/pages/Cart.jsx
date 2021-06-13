@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import CartItem from "./CartItem";
+import { CartItem } from "./CartItem";
 import { arrayOfProducts } from "../products.json";
-import {CartContext} from "../App";
+import { CartContext } from "../App";
 import { Link } from 'react-router-dom';
 
-function Cart(props) {
+export function Cart(props) {
 
   const tableHeader = ["Product", "Name", "Price", "Quantity", "Total", "Remove"]
   const tableHeaderList = tableHeader.map(header => <th scope="col"> {header} </th>)
@@ -53,5 +53,3 @@ function Cart(props) {
     </div>
   )
 }
-
-export default Cart;

@@ -1,4 +1,4 @@
-function InputField (props) {
+export function InputField (props) {
 
   function handleChange(event) {
     const eventValue = {
@@ -18,5 +18,3 @@ function InputField (props) {
     </div>
   );
 }
-
-export default InputField;

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useReducer, useContext } from "react";
-import InputField from '../components/InputField';
+import { InputField } from '../components/InputField';
 import { AuthContext, UsersContext, LoadingContext } from "../App";
 
-export default function Login(props) {
+export function Login(props) {
 
   const {authStatus, updateStatus} = useContext(AuthContext);
   const {isLoading, updateLoading} = useContext(LoadingContext);

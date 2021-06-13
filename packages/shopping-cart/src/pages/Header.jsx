@@ -1,18 +1,15 @@
 import { Link, Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import { useContext } from "react";
-import About from "./About";
-import Home from "./Home.jsx";
-import Login from "./Login.jsx";
-import Products from "./Products";
-import Register from "./Register";
-import Cart from "./Cart";
+import { About } from "./About";
+import { Home } from "./Home.jsx";
+import { Login } from "./Login.jsx";
+import { Products } from "./Products.jsx";
+import { Register } from "./Register";
+import { Cart } from "./Cart";
 import { AuthContext, LoadingContext } from "../App";
-import {CartContext} from "../App";
+import { CartContext } from "../App";
 
-
-
-
-function Header() {
+export function Header() {
 
   const {cart, addToCart, updateCart} = useContext(CartContext);
 
@@ -62,5 +59,3 @@ function Header() {
     </div>
   );
 }
-
-export default Header;

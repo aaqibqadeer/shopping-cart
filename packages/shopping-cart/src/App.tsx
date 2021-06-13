@@ -1,13 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import Header from "./pages/Header.jsx";
+import { Header } from "./pages/Header.jsx";
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
 export const LoadingContext = React.createContext({});
 export const CartContext = React.createContext({});
 
-function App() {
+export default function App() {
   const [authStatus, setAuthStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<any>([{name:"aaqib", email:"aaqib@gmail.com", password:"abc12345"}]);
@@ -55,5 +55,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -1,9 +1,9 @@
 import {Link} from 'react-router-dom';
 import { useContext, useReducer } from "react";
-import InputField from '../components/InputField';
+import { InputField } from '../components/InputField';
 import { UsersContext, LoadingContext } from "../App";
 
-export default function Register(props) {
+export function Register(props) {
   
   const {users, addUser} = useContext(UsersContext);
   const {isLoading, updateLoading} = useContext(LoadingContext);
