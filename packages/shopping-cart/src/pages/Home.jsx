@@ -5,7 +5,7 @@ import { Product } from './Product.jsx';
 
 export function Home(props) {
 
-  const {authStatus, updateStatus} = useContext(AuthContext);
+  const {authStatus} = useContext(AuthContext);
   
   return(
     <div className="container">

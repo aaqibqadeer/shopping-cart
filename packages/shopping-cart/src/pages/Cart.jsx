@@ -25,7 +25,7 @@ export function Cart(props) {
     updateCart(updatedCart);
   }
 
-  const {cart, addToCart, updateCart} = useContext(CartContext);
+  const {cart, updateCart} = useContext(CartContext);
 
   
   return(

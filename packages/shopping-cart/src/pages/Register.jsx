@@ -5,8 +5,8 @@ import { UsersContext, LoadingContext } from "../App";
 
 export function Register(props) {
   
-  const {users, addUser} = useContext(UsersContext);
-  const {isLoading, updateLoading} = useContext(LoadingContext);
+  const {addUser} = useContext(UsersContext);
+  const {updateLoading} = useContext(LoadingContext);
   const [formObject, setFormObject] = useReducer(formReducer, {name:"", email:"", password:"", confirmPassword:""});
   
   function formReducer(state, event) {

@@ -5,9 +5,9 @@ import { AuthContext, UsersContext, LoadingContext } from "../App";
 
 export function Login(props) {
 
-  const {authStatus, updateStatus} = useContext(AuthContext);
-  const {isLoading, updateLoading} = useContext(LoadingContext);
-  const {users, addUser} = useContext(UsersContext);
+  const { updateStatus } = useContext(AuthContext);
+  const { updateLoading } = useContext(LoadingContext);
+  const { users } = useContext(UsersContext);
 
   function formReducer(state, event) {
     return {

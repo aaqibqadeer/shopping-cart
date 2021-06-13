@@ -3,8 +3,8 @@ import { LoadingContext, AuthContext } from "../App";
 
 export function Signout(props) {
 
-  const {isLoading, updateLoading} = useContext(LoadingContext);
-  const {authStatus, updateStatus} = useContext(AuthContext);
+  const { updateLoading } = useContext(LoadingContext);
+  const { updateStatus } = useContext(AuthContext);
 
 
   function logout() {

@@ -7,8 +7,8 @@ import { Signout } from './Signout'
 
 export function Header() {
 
-  const {cart, addToCart, updateCart} = useContext(CartContext);
-  const {authStatus, updateStatus} = useContext(AuthContext);
+  const { cart } = useContext(CartContext);
+  const { authStatus } = useContext(AuthContext);
   
 
   const links = [
