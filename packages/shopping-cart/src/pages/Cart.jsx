@@ -33,7 +33,7 @@ export function Cart(props) {
   useEffect(() => {
     if(cart.length>0) {
       const tempCart = cart.map(item => ({
-        quantity:item.qunatity,
+        quantity:item.quantity,
         product:getProductInfo(item)
       }))
       setCartList(tempCart);
