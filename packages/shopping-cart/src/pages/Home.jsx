@@ -9,7 +9,7 @@ export function Home(props) {
   
   return(
     <div className="container">
-      <div className="row">
+      <div className="row scroll">
           {productsList.arrayOfProducts.map((product) =>
             <Product product={product} key={product.id} id={product.id} authStatus={authStatus} />
           )}

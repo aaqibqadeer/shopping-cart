@@ -9,8 +9,10 @@ import { Login } from "./pages/Login.jsx";
 import { Products } from "./pages/Products.jsx";
 import { Register } from "./pages/Register";
 import { Cart } from "./pages/Cart";
-import { Overlay } from './AppStyle';
+import { Overlay } from './AppStyle.jsx';
 import { RouteGuard } from "./components/guard/RouteGuard";
+import { Checkout } from "./pages/Checkout";
+import { OrderSuccess } from "./pages/OrderSuccess";
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
@@ -66,6 +68,8 @@ export default function App() {
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />
                     <RouteGuard path="/cart" Component={Cart} auth={authStatus}/>
+                    <RouteGuard path="/checkout" Component={Checkout} auth={authStatus}/>
+                    <RouteGuard path="/order-success" Component={OrderSuccess} auth={authStatus}/>
                   </Switch>
                 </Router>
             </AuthContext.Provider>

@@ -13,7 +13,7 @@ export function Products(props) {
   
   return(
     <div className="container">
-      <div className="row">
+      <div className="row scroll">
         {productsList.arrayOfProducts.length>0 && ProductList}
         {productsList.arrayOfProducts.length===0 && <NoProduct/>}
       </div>

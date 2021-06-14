@@ -16,7 +16,7 @@ table th, table tr {
   text-align: center; 
 }
 
-.row{
+.scroll{
   overflow-y: scroll;
   height: 640px;
 }
