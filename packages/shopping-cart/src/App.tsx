@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { useState } from "react";
-import { Header } from "./pages/Header.jsx";
+import { Header } from "./components/Header.jsx";
 import { Routes } from "./components/Routes";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";

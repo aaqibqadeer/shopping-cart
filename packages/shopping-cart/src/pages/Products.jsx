@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import productsList from '../products.json';
-import { Product } from './Product';
+import { Product } from '../components/Product';
 import { AuthContext } from "../App";
 
 export function Products(props) {

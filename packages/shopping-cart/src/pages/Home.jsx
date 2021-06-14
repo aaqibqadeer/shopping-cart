@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../App";
 import productsList from '../products.json';
-import { Product } from './Product.jsx';
+import { Product } from '../components/Product.jsx';
 
 export function Home(props) {
 
