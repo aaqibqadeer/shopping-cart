@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartItem } from "../components/CartItem";
 import { arrayOfProducts } from "../products.json";
 import { CartContext } from "../App";
@@ -27,6 +27,19 @@ export function Cart(props) {
 
   const {cart, updateCart} = useContext(CartContext);
 
+  // let CartList;
+  const CartList = cart.map(item => {
+    const product = getProductInfo(item)
+    return <CartItem quantity={item.quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />
+  });
+
+  // useEffect(() => {
+  //   CartList = cart.map(item => {
+  //     const product = getProductInfo(item)
+  //     return <CartItem quantity={item.quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />
+  //   });
+  // }, [cart]);
+
   
   return(
     <div>
@@ -41,12 +54,7 @@ export function Cart(props) {
             </tr>
           </thead>
           <tbody>
-            {cart.map(item => {
-              const product = getProductInfo(item)
-              return(
-                <CartItem quantity={item.quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />
-              )
-            })}
+            {CartList}
           </tbody>
         </table>
     </div>
