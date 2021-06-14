@@ -9,6 +9,8 @@ export function Login(props) {
   const { updateLoading } = useContext(LoadingContext);
   const { users } = useContext(UsersContext);
 
+  let timer;
+
   function formReducer(state, event) {
     return {
       ...state,
@@ -30,12 +32,12 @@ export function Login(props) {
     event.preventDefault();
     updateLoading(true);
     if(userExists()) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         updateLoading(false);
         // alert("Login Successfull!")
         updateStatus(true);
+        clearTimeout(timer);
         props.history.replace("/");
-        
       }, 2000);
     } 
     else {

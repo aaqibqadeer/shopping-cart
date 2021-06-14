@@ -9,13 +9,14 @@ export function Register(props) {
   const {updateLoading} = useContext(LoadingContext);
   const [formObject, setFormObject] = useReducer(formReducer, {name:"", email:"", password:"", confirmPassword:""});
   
+  let timer;
+  
   function formReducer(state, event) {
     return {
       ...state,
       [event.name]: event.value
     }
   }
-
   
   function handleChange(event) {
     setFormObject(event)
@@ -29,10 +30,11 @@ export function Register(props) {
     event.preventDefault();
     if(validUser()) {
       updateLoading(true)
-      setTimeout(() => {
+      timer = setTimeout(() => {
         updateLoading(false);
         addUser({name:formObject.name, email:formObject.email, password:formObject.password})
         alert("New account created successfull!")
+        clearTimeout(timer);
       }, 2000);
     } 
     else {

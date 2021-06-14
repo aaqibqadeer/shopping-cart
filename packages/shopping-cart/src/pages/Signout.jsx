@@ -1,17 +1,18 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { LoadingContext, AuthContext } from "../App";
 
 export function Signout(props) {
 
   const { updateLoading } = useContext(LoadingContext);
   const { updateStatus } = useContext(AuthContext);
-
+  let timer;
 
   function logout() {
     updateLoading(true)
-    setTimeout(() => {
+    timer = setTimeout(() => {
       updateLoading(false)
       updateStatus(false)
+      clearTimeout(timer);
     }, 2000);
   }
 
