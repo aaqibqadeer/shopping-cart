@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Header } from "./components/Header.jsx";
 import { Routes } from "./components/Routes";
 import { Home } from "./pages/Home";
-import { About } from "./pages/About";
+import { About } from "./pages/About.jsx";
 import { Login } from "./pages/Login.jsx";
 import { Products } from "./pages/Products.jsx";
 import { Register } from "./pages/Register";
