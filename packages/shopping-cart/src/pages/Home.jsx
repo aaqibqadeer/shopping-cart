@@ -1,14 +1,18 @@
+import { useContext } from "react";
+import { AuthContext } from "../App";
 import productsList from '../products.json';
-import Product from './Product';
+import { Product } from '../components/Product.jsx';
 
-export default function Home(props) {
-  let products = productsList.arrayOfProducts
+export function Home(props) {
+
+  const {authStatus} = useContext(AuthContext);
+  
   return(
     <div className="container">
       <div className="row">
-        {products.map((product, index) =>
-          <Product product={product} key={index}/>
-        )}
+          {productsList.arrayOfProducts.map((product) =>
+            <Product product={product} key={product.id} id={product.id} authStatus={authStatus} />
+          )}
       </div>
     </div>
   )

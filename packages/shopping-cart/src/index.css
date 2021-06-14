@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+table th, table tr {
+  text-align: center; 
+}
+
+.row{
+  overflow-y: scroll;
+  height: 640px;
+}
+

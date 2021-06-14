@@ -17,5 +17,8 @@
     "build": "lerna run build --stream",
     "watch": "lerna run watch --stream",
     "clean": "npx lerna clean -y"
+  },
+  "dependencies": {
+    "styled-components": "^5.3.0"
   }
 }

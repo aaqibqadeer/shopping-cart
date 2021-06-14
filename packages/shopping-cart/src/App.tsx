@@ -1,50 +1,77 @@
-import { Link, Switch, BrowserRouter as Router, Route } from "react-router-dom";
-import About from "./pages/About";
-import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
-import Products from "./pages/Products";
-import Register from "./pages/Register";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { useState } from "react";
+import { Header } from "./components/Header.jsx";
+import { Routes } from "./components/Routes";
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { Login } from "./pages/Login.jsx";
+import { Products } from "./pages/Products.jsx";
+import { Register } from "./pages/Register";
+import { Cart } from "./pages/Cart";
+import { Overlay } from './AppStyle';
+import { RouteGuard } from "./components/guard/RouteGuard";
 
-function App() {
+export const AuthContext = React.createContext({});
+export const UsersContext = React.createContext({});
+export const LoadingContext = React.createContext({});
+export const CartContext = React.createContext({});
+
+export default function App() {
+  const [authStatus, setAuthStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState<any>([{name:"aaqib", email:"aaqib@gmail.com", password:"abc12345"}]);
+  const [cart, setCart] = useState<any>([{id:1, quantity:1}]);
+
+  function updateStatus(status:any) {
+    setAuthStatus(status)
+  }
+
+  function addUser(user:any) {
+    setUsers([...users,user])
+  }
+
+  function updateLoading(status:any) {
+    setIsLoading(status)
+  }
+
+  function addToCart(product:any) {
+    setCart([...cart, product])
+    console.log(cart)
+  }
+
+  function updateCart(cart:any) {
+    setCart(cart)
+    console.log(cart)
+  }
+
   return (
     <div className="App">
-      <Router>
-        <nav className="mb-5 navbar navbar-dark bg-dark navbar-expand-lg">
-          <Link to="/" className="navbar-brand">Shopping Cart</Link>
-          <div className="collapse navbar-collapse" id="navbarText">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item"> <Link to="/" className="nav-link"> Home </Link> </li>
-              <li className="nav-item"> <Link to="/products" className="nav-link"> Products </Link> </li>
-              <li className="nav-item"> <Link to="/about" className="nav-link"> About </Link> </li>
-            </ul>
+      {isLoading && <Overlay>
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border m-5 p-5" role="status">
           </div>
-            <button className="btn mx-2">
-              <i className="uil uil-shopping-cart-alt text-light position-relative">
-                <span className="badge bg-danger rounded-pill position-absolute top-0 start-100 fst-normal">4</span>
-              </i>
-            </button>
-            <Link to="/login" className="btn btn-primary mx-2">Sign In</Link>
-        </nav>
-        <Switch>
-          <Route exact path="/">
-            <Home/>
-          </Route>
-          <Route path="/products">
-            <Products/>
-          </Route>
-          <Route path="/about">
-            <About/>
-          </Route>
-          <Route path="/login">
-            <Login/>
-          </Route>
-          <Route path="/register">
-            <Register/>
-          </Route>
-        </Switch>
-      </Router>
+        </div>
+      </Overlay>}
+      <CartContext.Provider value={{ cart, addToCart, updateCart }}>
+        <LoadingContext.Provider value={{ isLoading, updateLoading }}>
+          <UsersContext.Provider value={{users, addUser}}>
+            <AuthContext.Provider value={{authStatus, updateStatus}}>
+                <Router>
+                  <Header/>
+                  <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/products" component={Products} />
+                    <Route path="/about" component={About} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/register" component={Register} />
+                    <RouteGuard path="/cart" Component={Cart} auth={authStatus}/>
+                  </Switch>
+                </Router>
+            </AuthContext.Provider>
+          </UsersContext.Provider>
+        </LoadingContext.Provider>
+      </CartContext.Provider>
     </div>
   );
 }
-
-export default App;
