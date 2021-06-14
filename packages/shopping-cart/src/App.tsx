@@ -1,8 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { useState } from "react";
 import { Header } from "./pages/Header.jsx";
 import { Routes } from "./components/Routes";
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { Login } from "./pages/Login.jsx";
+import { Products } from "./pages/Products.jsx";
+import { Register } from "./pages/Register";
+import { Cart } from "./pages/Cart";
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
@@ -51,7 +57,14 @@ export default function App() {
             <AuthContext.Provider value={{authStatus, updateStatus}}>
                 <Router>
                   <Header/>
-                  <Routes/>
+                  <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/products" component={Products} />
+                    <Route path="/about" component={About} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/register" component={Register} />
+                    <Route path="/cart" component={Cart} />
+                  </Switch>
                 </Router>
             </AuthContext.Provider>
           </UsersContext.Provider>
