@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartItem } from "../components/CartItem";
 import { arrayOfProducts } from "../products.json";
 import { CartContext } from "../App";
@@ -27,19 +27,19 @@ export function Cart(props) {
 
   const {cart, updateCart} = useContext(CartContext);
 
-  // let CartList;
-  const CartList = cart.map(item => {
-    const product = getProductInfo(item)
-    return <CartItem quantity={item.quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />
-  });
+  const [cartList, setCartList] = useState([]);
 
-  // useEffect(() => {
-  //   CartList = cart.map(item => {
-  //     const product = getProductInfo(item)
-  //     return <CartItem quantity={item.quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />
-  //   });
-  // }, [cart]);
-
+  useEffect(() => {
+    if(cart.length>0) {
+      const tempCart = cart.map(item => ({
+        quantity:item.qunatity,
+        product:getProductInfo(item)
+      }))
+      setCartList(tempCart);
+    }
+  }, [cart]);
+  
+  const CartItems = () => cartList.map(({quantity, product}) => <CartItem quantity={quantity} key={product.id} product={product} handleQuantity={handleQuantity} handleRemove={handleRemove} />)
   
   return(
     <div>
@@ -54,7 +54,7 @@ export function Cart(props) {
             </tr>
           </thead>
           <tbody>
-            {CartList}
+            <CartItems/>
           </tbody>
         </table>
     </div>
