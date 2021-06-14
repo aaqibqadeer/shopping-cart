@@ -1,15 +1,24 @@
 import {Link} from 'react-router-dom';
-import { useContext, useReducer } from "react";
+import { useContext, useReducer, useEffect } from "react";
 import { InputField } from '../components/InputField';
-import { UsersContext, LoadingContext } from "../App";
+import { AuthContext, UsersContext, LoadingContext } from "../App";
+import { useHistory } from "react-router-dom";
 
 export function Register(props) {
   
   const {addUser} = useContext(UsersContext);
   const {updateLoading} = useContext(LoadingContext);
+  const { authStatus } = useContext(AuthContext);
   const [formObject, setFormObject] = useReducer(formReducer, {name:"", email:"", password:"", confirmPassword:""});
+  const history = useHistory();
   
   let timer;
+
+  useEffect(() => {
+    if(authStatus) {
+      history.replace("/");
+    }
+  });
   
   function formReducer(state, event) {
     return {

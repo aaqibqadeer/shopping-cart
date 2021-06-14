@@ -10,6 +10,7 @@ import { Products } from "./pages/Products.jsx";
 import { Register } from "./pages/Register";
 import { Cart } from "./pages/Cart";
 import { Overlay } from './AppStyle';
+import { RouteGuard } from "./components/guard/RouteGuard";
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
@@ -64,7 +65,7 @@ export default function App() {
                     <Route path="/about" component={About} />
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />
-                    <Route path="/cart" component={Cart} />
+                    <RouteGuard path="/cart" Component={Cart} auth={authStatus}/>
                   </Switch>
                 </Router>
             </AuthContext.Provider>

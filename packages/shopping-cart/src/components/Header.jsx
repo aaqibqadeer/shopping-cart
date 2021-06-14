@@ -14,12 +14,12 @@ export function Header() {
   const links = [
     {text:"Home", to:"/"},
     {text:"Products", to:"/products"},
-    {text:"About", to:"/about"},
+    {text:"About", to:"/about"}
   ]
   
   return (
     <nav className="mb-5 navbar navbar-dark bg-dark navbar-expand-lg">
-      <div className="container-fluid">
+      <div className="container-fluid mx-2">
         <Link to="/" className="navbar-brand">Shopping Cart</Link>
           <Links links={links} />
           <Link to="/cart" className="btn mx-2">
@@ -29,7 +29,6 @@ export function Header() {
           </Link>
           { !authStatus && <Link to="/login" className="btn btn-primary mx-2">Sign In</Link> }
           <Signout authStatus={authStatus}/>
-          
       </div>
     </nav>
   );

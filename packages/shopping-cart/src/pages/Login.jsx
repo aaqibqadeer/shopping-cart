@@ -1,13 +1,21 @@
 import { Link } from 'react-router-dom';
-import { useReducer, useContext } from "react";
+import { useReducer, useContext, useEffect } from "react";
 import { InputField } from '../components/InputField';
 import { AuthContext, UsersContext, LoadingContext } from "../App";
+import { useHistory } from "react-router-dom";
 
 export function Login(props) {
 
-  const { updateStatus } = useContext(AuthContext);
+  const { authStatus, updateStatus } = useContext(AuthContext);
   const { updateLoading } = useContext(LoadingContext);
   const { users } = useContext(UsersContext);
+  const history = useHistory();
+
+  useEffect(() => {
+    if(authStatus) {
+      history.replace("/");
+    }
+  });
 
   let timer;
 
