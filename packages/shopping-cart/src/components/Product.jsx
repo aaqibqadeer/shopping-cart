@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { CartContext } from "../App";
+import "../style/css/Product.css"
 
 export function Product(props) {
 
@@ -20,11 +21,11 @@ export function Product(props) {
 
   return(
     <div className="card col-3">
-      <img src={props.product.imgUrl} style={{width: "12rem"}}
-          className="mx-auto d-block card-img-top" alt="..."/>
+      <img src={props.product.imgUrl}
+          className="mx-auto d-block card-img-top img-width" alt="..."/>
           
       <div className="card-body">
-        <h5 className="card-title" style={{"minHeight": "3rem"}}> {props.product.name} </h5>
+        <h5 className="card-title heading-height"> {props.product.name} </h5>
         {/* <p className="card-text">Some quick example text.</p> */}
         <p className="card-text fw-bold"> Price: ${props.product.price} </p>
         { props.authStatus && !isAddedToCart && <button onClick={handleUpdate}

@@ -9,6 +9,7 @@ import { Login } from "./pages/Login.jsx";
 import { Products } from "./pages/Products.jsx";
 import { Register } from "./pages/Register";
 import { Cart } from "./pages/Cart";
+import { Overlay } from './AppStyle';
 
 export const AuthContext = React.createContext({});
 export const UsersContext = React.createContext({});
@@ -45,12 +46,12 @@ export default function App() {
 
   return (
     <div className="App">
-      {isLoading && <div className="overlay">
+      {isLoading && <Overlay>
         <div className="d-flex justify-content-center">
           <div className="spinner-border m-5 p-5" role="status">
           </div>
         </div>
-      </div>}
+      </Overlay>}
       <CartContext.Provider value={{ cart, addToCart, updateCart }}>
         <LoadingContext.Provider value={{ isLoading, updateLoading }}>
           <UsersContext.Provider value={{users, addUser}}>

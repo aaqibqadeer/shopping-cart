@@ -10,9 +10,9 @@ export function Home(props) {
   return(
     <div className="container">
       <div className="row">
-        {productsList.arrayOfProducts.map((product) =>
-          <Product product={product} key={product.id} id={product.id} authStatus={authStatus} />
-        )}
+          {productsList.arrayOfProducts.map((product) =>
+            <Product product={product} key={product.id} id={product.id} authStatus={authStatus} />
+          )}
       </div>
     </div>
   )

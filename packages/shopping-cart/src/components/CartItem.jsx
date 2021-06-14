@@ -1,3 +1,5 @@
+import '../style/css/CartItem.css';
+
 export function CartItem(props) {
 
   function handleQuantity(event) {
@@ -11,10 +13,10 @@ export function CartItem(props) {
   
   return(
     <tr className="align-middle">
-      <td> <img src={props.product.imgUrl} alt="" style={{width: "12rem"}} /> </td>
+      <td> <img src={props.product.imgUrl} alt="" className="img-width" /> </td>
       <td> <h6>{props.product.name}</h6> </td>
       <td> ${props.product.price} </td>
-      <td> <input type="number" value={props.quantity} onChange={handleQuantity} style={{width: "3rem"}}/> </td>
+      <td> <input type="number" value={props.quantity} onChange={handleQuantity} className="input-width" /> </td>
       <td> ${props.product.price*props.quantity} </td>
       <td> <button onClick={handleRemove} className="btn"> <i className="uil uil-multiply"></i> </button> </td>
     </tr>
