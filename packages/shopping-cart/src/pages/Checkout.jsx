@@ -3,6 +3,7 @@ import { InputField } from '../components/InputField';
 import { SelectField } from '../components/SelectField';
 import { CheckoutSummary } from '../components/CheckoutSummary';
 import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export function Checkout(props) {
 
@@ -21,6 +22,7 @@ export function Checkout(props) {
   ]
 
   const history = useHistory();
+  const location = useLocation();
 
   function formReducer(state, event) {
     return {
@@ -66,7 +68,7 @@ export function Checkout(props) {
         </div>
 
         <div className="col-4">
-          <CheckoutSummary subtotal={10} deliveryCharges={2}/>
+          <CheckoutSummary subtotal={location.state.subtotal} deliveryCharges={2}/>
         </div>
       </div> 
     </div>

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { CartItem } from "../components/CartItem";
 import { arrayOfProducts } from "../products.json";
 import { CartContext } from "../App";
@@ -9,9 +10,11 @@ export function Cart(props) {
 
   const tableHeader = ["Product", "Name", "Price", "Quantity", "Total", "Remove"]
   const tableHeaderList = tableHeader.map(header => <th key={header} scope="col"> {header} </th>)
+  let price=0;
+  const history = useHistory();
 
-  function getProductInfo(item) {
-    return arrayOfProducts.find(product => product.id === item.id)
+  function getProductInfo(id) {
+    return arrayOfProducts.find(product => product.id === id)
   }
 
   function handleQuantity(quantity, id) {
@@ -26,6 +29,19 @@ export function Cart(props) {
     updateCart(updatedCart);
   }
 
+  const proceedToCheckout = () => {
+    if(cart.length>0) {
+      cart.forEach(item => {
+        const product = getProductInfo(item.id)
+        price += (product.price * item.quantity)
+      })
+      history.push({
+        pathname: '/checkout',
+        state: { subtotal: price }
+      });
+    }
+  }
+
   const {cart, updateCart} = useContext(CartContext);
 
   const [cartList, setCartList] = useState([]);
@@ -34,7 +50,7 @@ export function Cart(props) {
     if(cart.length>0) {
       const tempCart = cart.map(item => ({
         quantity:item.quantity,
-        product:getProductInfo(item)
+        product:getProductInfo(item.id)
       }))
       setCartList(tempCart);
     }
@@ -45,7 +61,7 @@ export function Cart(props) {
   return(
     <div className="container">
       <div className="text-end">
-        <Link to="/checkout" className="btn btn-primary mb-3">Proceed to Checkout <i className="uil uil-angle-right"></i> </Link>
+        <button onClick={proceedToCheckout} className="btn btn-primary mb-3">Proceed to Checkout <i className="uil uil-angle-right"></i> </button>
       </div>
       <div className="table-responsive">
         <TableWrapper>
