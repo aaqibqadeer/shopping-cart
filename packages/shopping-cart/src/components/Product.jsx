@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from "../App";
 import "../style/css/Product.css"
 
@@ -18,6 +18,15 @@ export function Product(props) {
     updateCart(updatedCart);
     setIsAddedToCart(false);
   }
+
+  // const addedToCart = () => { return cart.find( ({ id }) => id === props.id ) }
+
+  useEffect(() => {
+    const addedToCart = cart.find( ({ id }) => id === props.id )
+    if(addedToCart) {
+      setIsAddedToCart(true);
+    }
+  }, [cart, props]);
 
   return(
     <div className="card col-3">
