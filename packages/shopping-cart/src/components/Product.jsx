@@ -19,8 +19,6 @@ export function Product(props) {
     setIsAddedToCart(false);
   }
 
-  // const addedToCart = () => { return cart.find( ({ id }) => id === props.id ) }
-
   useEffect(() => {
     const addedToCart = cart.find( ({ id }) => id === props.id )
     if(addedToCart) {
