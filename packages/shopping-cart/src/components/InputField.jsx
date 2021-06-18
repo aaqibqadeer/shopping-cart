@@ -1,20 +1,35 @@
-export function InputField (props) {
+export const InputField = ({
+  label,
+  type: proptype,
+  placeholder,
+  value,
+  onChange,
+}) => {
+  const defaultTypes = ["email", "password"];
+  const type = proptype
+    ? proptype
+    : defaultTypes.includes(label.toLowerCase())
+    ? label
+    : "text";
 
-  function handleChange(event) {
-    const eventValue = {
-      name:event.target.name,
-      value:event.target.value
-    }
-    props.onValueChange(eventValue)
-  }
-  
+  const handleChange = (event) => {
+    onChange(event.target.value);
+  };
+
   return (
     <div className="mb-3">
-      <label className="form-label">{props.label}</label>
-      <input type={props.type} className="form-control" name={props.name}
-        value={props.value} placeholder={props.placeholder} onChange={handleChange} required/>
+      <label className="form-label">{label}:</label>
+      <input
+        type={type}
+        className="form-control"
+        name={label.toLowerCase()}
+        value={value}
+        placeholder={placeholder}
+        onChange={handleChange}
+        required
+      />
       <div className="invalid-feedback"> Invalid value! </div>
       {/* <div className="valid-feedback"> Looks good! </div> */}
     </div>
   );
-}
+};

@@ -1,9 +1,12 @@
-export function PriceLabel(props) {
-  
-  return(
+export const PriceLabel = ({ label, bold, value }) => {
+  return (
     <div className="d-flex">
-      <p className={props.bold ? "price-label fw-bold":"price-label"}>{props.label} </p>
-      <p className={props.bold? 'price-value ms-auto fw-bold':'price-value ms-auto'}>${props.value}</p>
+      <p className={bold ? "price-label fw-bold" : "price-label"}>{label} </p>
+      <p
+        className={bold ? "price-value ms-auto fw-bold" : "price-value ms-auto"}
+      >
+        ${value}
+      </p>
     </div>
-  )
-}
+  );
+};

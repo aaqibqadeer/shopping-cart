@@ -1,69 +1,85 @@
-import {Link} from 'react-router-dom';
-import { useContext, useReducer, useEffect } from "react";
-import { InputField } from '../components/InputField';
+import { useContext, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { InputField } from "../components";
 import { AuthContext, UsersContext, LoadingContext } from "../App";
-import { useHistory } from "react-router-dom";
 
-export function Register(props) {
-  
-  const {addUser} = useContext(UsersContext);
-  const {updateLoading} = useContext(LoadingContext);
+export const Register = () => {
+  const { addUser } = useContext(UsersContext);
+  const { updateLoading } = useContext(LoadingContext);
   const { authStatus } = useContext(AuthContext);
-  const [formObject, setFormObject] = useReducer(formReducer, {name:"", email:"", password:"", confirmPassword:""});
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const history = useHistory();
-  
-  let timer;
 
   useEffect(() => {
-    if(authStatus) {
+    if (authStatus) {
       history.replace("/");
     }
   });
-  
-  function formReducer(state, event) {
-    return {
-      ...state,
-      [event.name]: event.value
-    }
-  }
-  
-  function handleChange(event) {
-    setFormObject(event)
-  }
 
-  function validUser() {
-    return formObject.password === formObject.confirmPassword;
-  }
+  const validUser = () => password === confirmPassword;
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
+    let timer;
     event.preventDefault();
-    if(validUser()) {
-      updateLoading(true)
+    if (validUser()) {
+      updateLoading(true);
       timer = setTimeout(() => {
         updateLoading(false);
-        addUser({name:formObject.name, email:formObject.email, password:formObject.password})
-        alert("New account created successfull!")
+        addUser({
+          name: name,
+          email: email,
+          password: password,
+        });
+        alert("New account created successfull!");
         clearTimeout(timer);
       }, 2000);
-    } 
-    else {
+    } else {
       alert("Passwords does not match");
     }
-  }
+  };
 
-  return(
+  return (
     <div className="bg-light p-5 my-5 col-5 mx-auto border border-2">
       <h3 className="text-center mb-4">Create your account</h3>
       <form className="needs-validation" onSubmit={handleSubmit}>
-        <InputField name="name" label="Name:" type="text" placeholder="Enter your name" value={formObject.name}  onValueChange={handleChange} />
-        <InputField name="email" label="Email:" type="email" placeholder="Enter email address" value={formObject.email}  onValueChange={handleChange} />
-        <InputField name="password" label="Password:" type="password" placeholder="Enter password" value={formObject.password}  onValueChange={handleChange} />
-        <InputField name="confirmPassword" label="Confirm Password:" type="password" placeholder="Repeat password" value={formObject.confirmPassword}  onValueChange={handleChange} />
+        <InputField
+          label="Name"
+          placeholder="Enter your name"
+          value={name}
+          onChange={setName}
+        />
+        <InputField
+          label="Email"
+          placeholder="Enter email address"
+          value={email}
+          onChange={setEmail}
+        />
+        <InputField
+          label="Password"
+          placeholder="Enter password"
+          value={password}
+          onChange={setPassword}
+        />
+        <InputField
+          label="Confirm Password"
+          type="password"
+          placeholder="Repeat password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
         <div className="text-center">
-          <button type="submit" className="btn btn-primary btn-sm m-2">Register</button>
-          <Link to="/login" className="btn btn-primary btn-sm m-2">Login</Link>
+          <button type="submit" className="btn btn-primary btn-sm m-2">
+            Register
+          </button>
+          <Link to="/login" className="btn btn-primary btn-sm m-2">
+            Login
+          </Link>
         </div>
       </form>
     </div>
-  )
-}
+  );
+};

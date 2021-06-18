@@ -1,70 +1,65 @@
-import { Link } from 'react-router-dom';
-import { useReducer, useContext, useEffect } from "react";
-import { InputField } from '../components/InputField';
+import { useState, useContext, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext, UsersContext, LoadingContext } from "../App";
-import { useHistory } from "react-router-dom";
+import { InputField } from "../components";
 
-export function Login(props) {
-
+export const Login = () => {
   const { authStatus, updateStatus } = useContext(AuthContext);
   const { updateLoading } = useContext(LoadingContext);
   const { users } = useContext(UsersContext);
   const history = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if(authStatus) {
+    if (authStatus) {
       history.replace("/");
     }
-  });
+  }, [authStatus, history]);
 
-  let timer;
+  const userExists = () =>
+    users.some((user) => user.email === email && user.password === password);
 
-  function formReducer(state, event) {
-    return {
-      ...state,
-      [event.name]: event.value
-    }
-  }
-
-  const [formObject, setFormObject] = useReducer(formReducer, {email:"", password:""});
-  
-  function handleChange(event) {
-    setFormObject(event)
-  }
-
-  function userExists() {
-    return users.some(user => user.email === formObject.email && user.password === formObject.password )
-  }
-
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
     updateLoading(true);
-    if(userExists()) {
-      timer = setTimeout(() => {
+    if (userExists()) {
+      let timer = setTimeout(() => {
         updateLoading(false);
-        // alert("Login Successfull!")
         updateStatus(true);
         clearTimeout(timer);
-        props.history.replace("/");
       }, 2000);
-    } 
-    else {
+    } else {
       updateLoading(false);
       alert("Wrong Credentials");
     }
-  }
-  
-  return(
+  };
+
+  return (
     <div className="bg-light p-5 my-5 col-5 mx-auto border border-2">
       <h3 className="text-center mb-4">Enter your credentials</h3>
       <form className="" onSubmit={handleSubmit}>
-        <InputField label="Email:" name="email" type="text" placeholder="Enter email address" value={formObject.email}  onValueChange={handleChange}/>
-        <InputField label="Password:" name="password" type="password" placeholder="Enter password" value={formObject.password}  onValueChange={handleChange}/>
+        <InputField
+          label="Email"
+          placeholder="Enter email address"
+          value={email}
+          onChange={setEmail}
+        />
+        <InputField
+          label="Password"
+          placeholder="Enter password"
+          value={password}
+          onChange={setPassword}
+        />
         <div className="text-center">
-          <button type="submit" className="btn btn-primary btn-sm m-2">Login</button>
-          <Link to="/register" className="btn btn-primary btn-sm m-2">Register</Link>
+          <button type="submit" className="btn btn-primary btn-sm m-2">
+            Login
+          </button>
+          <Link to="/register" className="btn btn-primary btn-sm m-2">
+            Register
+          </Link>
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
