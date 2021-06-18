@@ -57,7 +57,7 @@ export const App = () => {
                   <Route path="/about" component={About} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
-                  <RouteGuard path="/cart" Component={Cart} auth={authStatus} />
+                  <Route path="/cart" component={Cart} />
                   <RouteGuard
                     path="/checkout"
                     Component={Checkout}

@@ -37,7 +37,7 @@ export const Product = ({ id, product, authStatus }) => {
         <h5 className="card-title heading-height"> {product.name} </h5>
         {/* <p className="card-text">Some quick example text.</p> */}
         <p className="card-text fw-bold"> Price: ${product.price} </p>
-        {authStatus && !isAddedToCart && (
+        {!isAddedToCart && (
           <button
             onClick={handleUpdate}
             className="btn btn-sm btn-success mx-auto d-block"
@@ -45,7 +45,7 @@ export const Product = ({ id, product, authStatus }) => {
             Add to cart
           </button>
         )}
-        {authStatus && isAddedToCart && (
+        {isAddedToCart && (
           <button
             onClick={handleRemove}
             className="btn btn-sm btn-success mx-auto d-block"

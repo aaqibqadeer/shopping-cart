@@ -23,10 +23,9 @@ export const Header = () => {
         <Links links={links} />
         <Link to="/cart" className="mx-4">
           <i className="icon-size uil uil-shopping-cart-alt text-light position-relative">
-            {authStatus && cart.length > 0 && (
+            {cart.length > 0 && (
               <span className="badge bg-danger rounded-pill position-absolute top-0 start-100 badge-size">
-                {" "}
-                {cart.length}{" "}
+                {cart.length}
               </span>
             )}
           </i>
