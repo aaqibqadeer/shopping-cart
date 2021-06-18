@@ -3,48 +3,40 @@ import { useState, useContext, useRef } from "react";
 
 export const CartContext = React.createContext({});
 
-function CartContextProvider(props) {
-  const [cart, setCart] = useState([{id:1, quantity:1}]);
+const CartContextProvider = ({ children }) => {
+  const addToCart = (product) => setCart([...cart, product]);
+
+  const [cart, setCart] = useState([{ id: 1, quantity: 1 }]);
+
   const ref = useRef({
-    cart:cart,
-    setCart:setCart,
-    addToCart:addToCart
-  })
-  console.log("ref")
-  console.log(ref.current)
+    cart: cart,
+    setCart: setCart,
+    addToCart: addToCart,
+  });
 
-  function addToCart(product) {
-    // ref.current.cart = [...ref.current.cart, product]
-    // ref.current.setCart(ref.current.cartValue)
-    setCart([...cart, product])
-    console.log(product)
-    console.log(cart)
-    // console.log(ref.current.cart)
-  }
+  const updateCart = (cart) => setCart();
 
-  function updateCart(cart) {
-    setCart()
-  }
+  return (
+    <CartContext.Provider
+      value={{
+        cart: ref.current.cart,
+        addToCart: ref.current.addToCart,
+        updateCart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+};
 
-  // return function (props) {
-    return (
-      <CartContext.Provider value={{ cart:ref.current.cart, addToCart:ref.current.addToCart, updateCart }}> 
-        { props.children }
-      </CartContext.Provider>
-    )
-  // }
-}
+export const useCartContext = () => useContext(CartContext);
 
-export function useCartContext() {
-  return useContext(CartContext);
-}
-
-export function withCartContext(Component) {
+export const withCartContext = (Component) => {
   return function (props) {
     return (
       <CartContextProvider>
         <Component {...props} />
       </CartContextProvider>
-    )
-  }
-}
+    );
+  };
+};

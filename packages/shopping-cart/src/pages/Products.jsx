@@ -1,22 +1,27 @@
 import { useContext } from "react";
-import productsList from '../products.json';
-import { Product } from '../components/Product';
-import { NoProduct } from '../components/NoProduct';
 import { AuthContext } from "../App";
+import { Product, NoProduct } from "../components";
+import productsList from "../products.json";
 
-export function Products(props) {
+export const Products = () => {
   const { authStatus } = useContext(AuthContext);
 
-  const ProductList = productsList.arrayOfProducts.map((product) =>
-    <Product product={product} key={product.id} id={product.id} authStatus={authStatus}/>
-  )
-  
-  return(
+  const ProductList = () =>
+    productsList.arrayOfProducts.map((product) => (
+      <Product
+        product={product}
+        key={product.id}
+        id={product.id}
+        authStatus={authStatus}
+      />
+    ));
+
+  return (
     <div className="container">
       <div className="row scroll">
-        {productsList.arrayOfProducts.length>0 && ProductList}
-        {productsList.arrayOfProducts.length===0 && <NoProduct/>}
+        {productsList.arrayOfProducts.length > 0 && <ProductList />}
+        {productsList.arrayOfProducts.length === 0 && <NoProduct />}
       </div>
     </div>
-  )
-}
+  );
+};
