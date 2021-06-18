@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../components";
 import { arrayOfProducts } from "../products.json";
-import { CartContext } from "../App";
+import { CartContext, AuthContext } from "../App";
 import { TableWrapper } from "../style/CartStyle";
 
 export const Cart = () => {
@@ -38,20 +38,28 @@ export const Cart = () => {
   };
 
   const proceedToCheckout = () => {
-    let price = 0;
-    if (cart.length > 0) {
-      cart.forEach((item) => {
-        const product = getProductInfo(item.id);
-        price += product.price * item.quantity;
-      });
+    if (!authStatus) {
+      alert("Please login first in order to checkout");
       history.push({
         pathname: "/checkout",
-        state: { subtotal: price },
       });
+    } else {
+      let price = 0;
+      if (cart.length > 0) {
+        cart.forEach((item) => {
+          const product = getProductInfo(item.id);
+          price += product.price * item.quantity;
+        });
+        history.push({
+          pathname: "/checkout",
+          state: { subtotal: price },
+        });
+      }
     }
   };
 
   const { cart, updateCart } = useContext(CartContext);
+  const { authStatus } = useContext(AuthContext);
 
   const [cartList, setCartList] = useState([]);
 

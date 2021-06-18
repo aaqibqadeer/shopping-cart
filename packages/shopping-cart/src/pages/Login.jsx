@@ -13,7 +13,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (authStatus) {
-      history.replace("/");
+      history.goBack();
     }
   }, [authStatus, history]);
 
