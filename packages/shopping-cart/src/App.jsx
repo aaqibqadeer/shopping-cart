@@ -21,20 +21,20 @@ export const CartContext = React.createContext({});
 export const App = () => {
   const [authStatus, setAuthStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [users, setUsers] = useState<any>([
+  const [users, setUsers] = useState([
     { name: "aaqib", email: "aaqib@gmail.com", password: "abc12345" },
   ]);
-  const [cart, setCart] = useState<any>([{ id: 1, quantity: 1 }]);
+  const [cart, setCart] = useState([{ id: 1, quantity: 1 }]);
 
-  const updateStatus = (status: any) => setAuthStatus(status);
+  const updateStatus = (status) => setAuthStatus(status);
 
-  const addUser = (user: any) => setUsers([...users, user]);
+  const addUser = (user) => setUsers([...users, user]);
 
-  const updateLoading = (status: any) => setIsLoading(status);
+  const updateLoading = (status) => setIsLoading(status);
 
-  const addToCart = (product: any) => setCart([...cart, product]);
+  const addToCart = (product) => setCart([...cart, product]);
 
-  const updateCart = (cart: any) => setCart(cart);
+  const updateCart = (cart) => setCart(cart);
 
   return (
     <div className="App">
