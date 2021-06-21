@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 import { User } from './user.interface';
 
 @Injectable()
@@ -15,13 +17,17 @@ export class UserService {
     return this.get(id);
   }
 
-  async login(email: string, password: string) {
-    const result = await this.isUserExist(email, password);
+  async login(loginDto: LoginDto) {
+    const result = await this.isUserExist(loginDto.email, loginDto.password);
     return result;
   }
 
-  register(name: string, email: string, password: string) {
-    const user: User = { name, email, password };
+  register(registerDto: RegisterDto) {
+    const user: User = {
+      name: registerDto.name,
+      email: registerDto.email,
+      password: registerDto.password,
+    };
     return this.addUser(user);
   }
 

@@ -1,12 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { OrderDto } from './dto/order.dto';
 import { OrderService } from './order.service';
 
 @Controller('order')
@@ -24,23 +17,7 @@ export class CartController {
   }
 
   @Post()
-  addOrder(@Body() body: any) {
-    // console.log();
-    // return body;
-    return this.orderService.add(
-      body.userId,
-      body.productList,
-      body.checkoutDetails,
-    );
+  addOrder(@Body() orderDto: OrderDto) {
+    return this.orderService.add(orderDto);
   }
-
-  // @Delete(':id')
-  // removeItem(@Param('id') id: string) {
-  //   return 'Delete Method';
-  // }
-
-  // @Delete('/empty')
-  // clearBasket() {
-  //   return 'Delete basket';
-  // }
 }

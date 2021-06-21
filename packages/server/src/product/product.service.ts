@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.interface';
 
 @Injectable()
@@ -17,19 +19,23 @@ export class ProductService {
     return this.get(id);
   }
 
-  create(title: string, price: number, description: string, imgUrl: string) {
-    const product: Product = { title, price, description, imgUrl };
+  create(createProductDto: CreateProductDto) {
+    const product: Product = {
+      title: createProductDto.title,
+      price: createProductDto.price,
+      description: createProductDto.description,
+      imgUrl: createProductDto.imgUrl,
+    };
     return this.addProduct(product);
   }
 
-  update(
-    id: string,
-    title: string,
-    price: number,
-    description: string,
-    imgUrl: string,
-  ) {
-    const product: Product = { title, price, description, imgUrl };
+  update(id: string, updateProductDto: UpdateProductDto) {
+    const product: Product = {
+      title: updateProductDto.title,
+      price: updateProductDto.price,
+      description: updateProductDto.description,
+      imgUrl: updateProductDto.imgUrl,
+    };
     return this.updateProduct(id, product);
   }
 
