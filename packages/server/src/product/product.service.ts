@@ -37,23 +37,23 @@ export class ProductService {
     return this.deleteProduct(id);
   }
 
-  async getAll() {
+  private async getAll() {
     const result = await this.productModel.find({});
     return result;
   }
 
-  async get(id: string) {
+  private async get(id: string) {
     const result = await this.productModel.findById(id);
     return result;
   }
 
-  async addProduct(product: Product) {
+  private async addProduct(product: Product) {
     const newProduct = new this.productModel(product);
     const result = await newProduct.save();
     return result;
   }
 
-  async updateProduct(id: string, product: Product) {
+  private async updateProduct(id: string, product: Product) {
     const updatedProduct = await this.productModel.findByIdAndUpdate(
       id,
       product,
@@ -61,7 +61,7 @@ export class ProductService {
     return updatedProduct;
   }
 
-  async deleteProduct(id: string) {
+  private async deleteProduct(id: string) {
     const deleteProduct = await this.productModel.findByIdAndDelete(id);
     return deleteProduct;
   }

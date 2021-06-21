@@ -7,6 +7,14 @@ import { User } from './user.interface';
 export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
+  findAll() {
+    return this.getAll();
+  }
+
+  find(id: string) {
+    return this.get(id);
+  }
+
   async login(email: string, password: string) {
     const result = await this.isUserExist(email, password);
     return result;
@@ -17,18 +25,34 @@ export class UserService {
     return this.addUser(user);
   }
 
-  async addUser(user: User) {
+  private async addUser(user: User) {
     const newUser = new this.userModel(user);
     const result = await newUser.save();
     return result;
   }
 
-  async allUsers() {
+  private async getAll() {
+    const result = await this.userModel.find({});
+    const updatedResult = result.map((user) => {
+      const { _id, name, email, ...userInfo } = user;
+      return { _id, name, email };
+    });
+    return updatedResult;
+  }
+
+  private async allUsers() {
     const result = await this.userModel.find({});
     return result;
   }
 
-  async isUserExist(email: string, password: string) {
+  private async get(id: string) {
+    const result = await this.userModel.findById(id);
+    const updatedResult = JSON.parse(JSON.stringify(result));
+    const { password, ...userInfo } = updatedResult;
+    return userInfo;
+  }
+
+  private async isUserExist(email: string, password: string) {
     const allUsers = await this.allUsers();
     const userExist = allUsers.find(
       (user) => user.email === email && user.password === password,
