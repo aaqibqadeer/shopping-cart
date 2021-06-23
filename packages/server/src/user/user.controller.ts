@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserService } from './user.service';
+import { Document, Query } from 'mongoose';
+import { User } from './user.interface';
 
 @Controller('user')
 export class UserController {
@@ -13,17 +16,17 @@ export class UserController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
+  find(@Param('id') id: string): Promise<(User & Document<any, any>) | null> {
     return this.userService.find(id);
   }
 
   @Post('/login')
-  login(@Body() loginDto: LoginDto) {
-    return this.userService.login(loginDto);
+  login(@Body() user: LoginDto): Promise<boolean> {
+    return this.userService.login(user);
   }
 
   @Post('/register')
-  register(@Body() registerDto: RegisterDto) {
-    return this.userService.register(registerDto);
+  register(@Body() user: RegisterDto): Promise<User & Document<any, any>> {
+    return this.userService.register(user);
   }
 }

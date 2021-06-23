@@ -1,47 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CartItem } from './cart-item.interface';
-import { CheckoutDetails } from './checkout-details.interface';
-import { OrderDto } from './dto/order.dto';
-import { Order } from './order.interface';
+import { OrderInterface } from './order.interface';
+import { defaultInternalServerErrorResponse } from '../common/errors';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectModel('Order') private readonly orderModel: Model<Order>,
+    @InjectModel('Order') private readonly orderModel: Model<OrderInterface>,
   ) {}
 
-  findAll() {
-    return this.getAll();
+  findAll(): Promise<OrderInterface[]> {
+    return this.getItems();
   }
 
-  find(id: string) {
-    return this.get(id);
+  find(id: string): Promise<OrderInterface> {
+    return this.getItem(id, null);
   }
 
-  add(orderDto: OrderDto) {
-    const order: Order = {
-      userId: orderDto.userId,
-      productList: orderDto.productList,
-      checkoutDetails: orderDto.checkoutDetails,
-    };
-    return this.addProduct(order);
+  findByUserId(id: string): Promise<OrderInterface[]> {
+    return this.getItemByUserId(id, null);
   }
 
-  private async getAll() {
-    const result = await this.orderModel.find({});
-    return result;
+  addOrder(order: OrderInterface): Promise<OrderInterface> {
+    return this.addItem(order);
   }
 
-  private async get(id: string) {
-    const result = await this.orderModel.findById(id);
-    return result;
+  private getItems(): Promise<OrderInterface[]> {
+    try {
+      return this.orderModel.find({}).exec();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  private async addProduct(order: Order) {
+  private async getItem(
+    id: string,
+    projection: unknown,
+  ): Promise<OrderInterface> {
+    try {
+      return this.orderModel.findById(id).select(projection).lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
+  }
+
+  private getItemByUserId(
+    id: string,
+    projection: unknown,
+  ): Promise<OrderInterface[]> {
+    try {
+      return this.orderModel.find({ userId: id }).projection(projection).lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
+  }
+
+  private async addItem(order: OrderInterface): Promise<OrderInterface> {
     const newOrder = new this.orderModel(order);
-    const result = await newOrder.save();
-    return result;
+    try {
+      return newOrder.save();
+    } catch (error) {
+      return error;
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Document, Query, Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.interface';
@@ -11,64 +11,76 @@ export class ProductService {
     @InjectModel('Product') private readonly productModel: Model<Product>,
   ) {}
 
-  findAll() {
-    return this.getAll();
+  findAll(): Query<
+    (Product & Document<any, any>)[],
+    Product & Document<any, any>
+  > {
+    return this.getItems();
   }
 
-  find(id: string) {
-    return this.get(id);
+  find(id: string): Promise<(Product & Document<any, any>) | null> {
+    return this.getItem(id);
   }
 
-  create(createProductDto: CreateProductDto) {
-    const product: Product = {
-      title: createProductDto.title,
-      price: createProductDto.price,
-      description: createProductDto.description,
-      imgUrl: createProductDto.imgUrl,
-    };
-    return this.addProduct(product);
+  createProduct(
+    product: CreateProductDto,
+  ): Promise<Product & Document<any, any>> {
+    return this.addItem(product);
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
-    const product: Product = {
-      title: updateProductDto.title,
-      price: updateProductDto.price,
-      description: updateProductDto.description,
-      imgUrl: updateProductDto.imgUrl,
-    };
-    return this.updateProduct(id, product);
+  updateProduct(
+    id: string,
+    product: UpdateProductDto,
+  ): Query<
+    (Product & Document<any, any>) | null,
+    Product & Document<any, any>
+  > {
+    return this.updateItem(id, product);
   }
 
-  delete(id: string) {
-    return this.deleteProduct(id);
+  deleteProduct(
+    id: string,
+  ): Query<
+    (Product & Document<any, any>) | null,
+    Product & Document<any, any>
+  > {
+    return this.deleteItem(id);
   }
 
-  private async getAll() {
-    const result = await this.productModel.find({});
-    return result;
+  private getItems(): Query<
+    (Product & Document<any, any>)[],
+    Product & Document<any, any>
+  > {
+    return this.productModel.find({});
   }
 
-  private async get(id: string) {
-    const result = await this.productModel.findById(id);
-    return result;
+  private async getItem(
+    id: string,
+  ): Promise<(Product & Document<any, any>) | null> {
+    return this.productModel.findById(id);
   }
 
-  private async addProduct(product: Product) {
+  private addItem(product: Product): Promise<Product & Document<any, any>> {
     const newProduct = new this.productModel(product);
-    const result = await newProduct.save();
-    return result;
+    return newProduct.save();
   }
 
-  private async updateProduct(id: string, product: Product) {
-    const updatedProduct = await this.productModel.findByIdAndUpdate(
-      id,
-      product,
-    );
-    return updatedProduct;
+  private updateItem(
+    id: string,
+    product: Product,
+  ): Query<
+    (Product & Document<any, any>) | null,
+    Product & Document<any, any>
+  > {
+    return this.productModel.findByIdAndUpdate(id, product);
   }
 
-  private async deleteProduct(id: string) {
-    const deleteProduct = await this.productModel.findByIdAndDelete(id);
-    return deleteProduct;
+  private deleteItem(
+    id: string,
+  ): Query<
+    (Product & Document<any, any>) | null,
+    Product & Document<any, any>
+  > {
+    return this.productModel.findByIdAndDelete(id);
   }
 }
