@@ -1,9 +1,16 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { Request } from 'express';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Session,
+} from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserService } from './user.service';
-import { Document, Query } from 'mongoose';
+import { Document } from 'mongoose';
 import { User } from './user.interface';
 
 @Controller('user')
@@ -21,8 +28,11 @@ export class UserController {
   }
 
   @Post('/login')
-  login(@Body() user: LoginDto): Promise<boolean> {
-    return this.userService.login(user);
+  login(
+    @Body() user: LoginDto,
+    @Session() session: Record<string, any>,
+  ): Promise<boolean> {
+    return this.userService.login(user, session);
   }
 
   @Post('/register')

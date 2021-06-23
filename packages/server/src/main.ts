@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(
     session({
-      secret: 'my-secret',
+      secret: '454545fdfdf454rgr454ykuyk4353f4',
       resave: false,
       saveUninitialized: false,
     }),
