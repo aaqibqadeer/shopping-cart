@@ -4,12 +4,11 @@ export const CartItem = ({
   product,
   quantity,
   handleQuantity: updateQuantity,
+  handleRemove,
 }) => {
   const handleQuantity = (event) => {
-    updateQuantity(event.target.value, product.id);
+    updateQuantity(event.target.value, product._id);
   };
-
-  const handleRemove = () => handleRemove(product.id);
 
   return (
     <tr className="align-middle">
@@ -30,7 +29,7 @@ export const CartItem = ({
       </td>
       <td> ${product.price * quantity} </td>
       <td>
-        <button onClick={handleRemove} className="btn">
+        <button onClick={() => handleRemove(product._id)} className="btn">
           <i className="uil uil-multiply"></i>
         </button>
       </td>

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../components";
-import { arrayOfProducts } from "../products.json";
-import { CartContext, AuthContext } from "../App";
+import { CartContext, AuthContext, LoadingContext } from "../App";
 import { TableWrapper } from "../style/CartStyle";
+import { useProductsHook } from "../utils/api";
 
 export const Cart = () => {
   const tableHeader = [
@@ -14,26 +14,54 @@ export const Cart = () => {
     "Total",
     "Remove",
   ];
+
+  const { res, getProducts, products } = useProductsHook();
+  const { updateLoading } = useContext(LoadingContext);
+  const { cart, updateCart } = useContext(CartContext);
+  const { authStatus } = useContext(AuthContext);
+  const [cartList, setCartList] = useState([]);
+
+  useEffect(() => {
+    updateLoading(res.loading);
+  }, [res, updateLoading]);
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  useEffect(() => {
+    if (cart.length > 0 && !isProductEmpty()) {
+      const tempCart = cart.map((item) => ({
+        quantity: item.quantity,
+        product: getProductInfo(item._id),
+      }));
+      setCartList(tempCart);
+    }
+  }, [cart, products]);
+
+  const history = useHistory();
+
   const TableHeaderList = () =>
     tableHeader.map((header) => (
       <th key={header} scope="col">
         {header}
       </th>
     ));
-  const history = useHistory();
 
-  const getProductInfo = (id) =>
-    arrayOfProducts.find((product) => product.id === id);
+  const isProductEmpty = () => Object.keys(products).length === 0;
 
-  const handleQuantity = (quantity, id) => {
+  const getProductInfo = (_id) =>
+    products.find((product) => product._id === _id);
+
+  const handleQuantity = (quantity, _id) => {
     const updatedCart = [...cart];
-    const productIndex = updatedCart.findIndex((item) => item.id === id);
+    const productIndex = updatedCart.findIndex((item) => item._id === _id);
     updatedCart[productIndex].quantity = quantity;
     updateCart(updatedCart);
   };
 
-  const handleRemove = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
+  const handleRemove = (_id) => {
+    const updatedCart = cart.filter((item) => item._id !== _id);
     updateCart(updatedCart);
   };
 
@@ -47,42 +75,28 @@ export const Cart = () => {
       let price = 0;
       if (cart.length > 0) {
         cart.forEach((item) => {
-          const product = getProductInfo(item.id);
+          const product = getProductInfo(item._id);
           price += product.price * item.quantity;
         });
         history.push({
           pathname: "/checkout",
-          state: { subtotal: price },
+          state: { subtotal: price, cart: cart },
         });
       }
     }
   };
 
-  const { cart, updateCart } = useContext(CartContext);
-  const { authStatus } = useContext(AuthContext);
-
-  const [cartList, setCartList] = useState([]);
-
-  useEffect(() => {
-    if (cart.length > 0) {
-      const tempCart = cart.map((item) => ({
-        quantity: item.quantity,
-        product: getProductInfo(item.id),
-      }));
-      setCartList(tempCart);
-    }
-  }, [cart]);
-
-  const CartItems = () =>
-    cartList.map(({ quantity, product }) => (
+  const CartItems = () => {
+    return cartList.map(({ quantity, product }) => (
       <CartItem
         quantity={quantity}
-        key={product.id}
+        key={product._id}
         product={product}
         handleQuantity={handleQuantity}
         handleRemove={handleRemove}
       />
     ));
+  };
 
   return (
     <div className="container">

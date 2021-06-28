@@ -7,19 +7,19 @@ export const Product = ({ id, product, authStatus }) => {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 
   const handleUpdate = () => {
-    const product = { id: id, quantity: 1 };
+    const product = { _id: id, quantity: 1 };
     setIsAddedToCart(true);
     addToCart(product);
   };
 
   const handleRemove = () => {
-    const updatedCart = cart.filter((item) => item.id !== id);
+    const updatedCart = cart.filter((item) => item._id !== id);
     updateCart(updatedCart);
     setIsAddedToCart(false);
   };
 
   useEffect(() => {
-    const addedToCart = cart.find(({ id: itemId }) => itemId === id);
+    const addedToCart = cart.find(({ _id: itemId }) => itemId === id);
     if (addedToCart) {
       setIsAddedToCart(true);
     }
