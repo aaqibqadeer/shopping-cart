@@ -2,15 +2,16 @@ import { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { InputField } from "../components";
 import { AuthContext, UsersContext, LoadingContext } from "../App";
+import { useRegisterHook } from "../utils/api/useRegisterHook";
 
 export const Register = () => {
-  const { addUser } = useContext(UsersContext);
   const { updateLoading } = useContext(LoadingContext);
   const { authStatus } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { res, register } = useRegisterHook();
 
   const history = useHistory();
 
@@ -18,25 +19,23 @@ export const Register = () => {
     if (authStatus) {
       history.replace("/");
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    updateLoading(res.loading);
+  }, [res, updateLoading]);
 
   const validUser = () => password === confirmPassword;
 
   const handleSubmit = (event) => {
-    let timer;
     event.preventDefault();
     if (validUser()) {
-      updateLoading(true);
-      timer = setTimeout(() => {
-        updateLoading(false);
-        addUser({
-          name: name,
-          email: email,
-          password: password,
-        });
-        alert("New account created successfull!");
-        clearTimeout(timer);
-      }, 2000);
+      const newUser = {
+        name: name,
+        email: email,
+        password: password,
+      };
+      register(newUser);
     } else {
       alert("Passwords does not match");
     }
