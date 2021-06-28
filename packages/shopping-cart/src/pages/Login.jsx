@@ -1,15 +1,16 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { AuthContext, UsersContext, LoadingContext } from "../App";
+import { AuthContext, LoadingContext } from "../App";
 import { InputField } from "../components";
+import { useLoginHook } from "../utils/api";
 
 export const Login = () => {
   const { authStatus, updateStatus } = useContext(AuthContext);
   const { updateLoading } = useContext(LoadingContext);
-  const { users } = useContext(UsersContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { res, login } = useLoginHook();
 
   useEffect(() => {
     if (authStatus) {
@@ -17,22 +18,18 @@ export const Login = () => {
     }
   }, [authStatus, history]);
 
-  const userExists = () =>
-    users.some((user) => user.email === email && user.password === password);
+  useEffect(() => {
+    updateStatus(res.success);
+    updateLoading(res.loading);
+  }, [res, updateStatus, updateLoading]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    updateLoading(true);
-    if (userExists()) {
-      let timer = setTimeout(() => {
-        updateLoading(false);
-        updateStatus(true);
-        clearTimeout(timer);
-      }, 2000);
-    } else {
-      updateLoading(false);
-      alert("Wrong Credentials");
-    }
+    const payload = {
+      email: email,
+      password: password,
+    };
+    login(payload);
   };
 
   return (
