@@ -13,6 +13,7 @@ import { SchemaModule } from './schema/schema.module';
     SchemaModule.forRoot(),
     MongooseModule.forRoot(
       'mongodb+srv://aaqib:1234@cluster0.cgljv.mongodb.net/cart?retryWrites=true&w=majority',
+      { useFindAndModify: false },
     ),
   ],
   controllers: [],

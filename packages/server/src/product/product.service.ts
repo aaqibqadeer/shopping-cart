@@ -1,86 +1,94 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Query, Model } from 'mongoose';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from './product.interface';
+import { Model } from 'mongoose';
+import { ProductInterface } from './product.interface';
+import { defaultInternalServerErrorResponse } from '../common/errors';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
+    @InjectModel('Product')
+    private readonly productModel: Model<ProductInterface>,
   ) {}
 
-  findAll(): Query<
-    (Product & Document<any, any>)[],
-    Product & Document<any, any>
-  > {
+  findAll(): Promise<ProductInterface[]> {
     return this.getItems();
   }
 
-  find(id: string): Promise<(Product & Document<any, any>) | null> {
-    return this.getItem(id);
+  find(id: string): Promise<ProductInterface> {
+    return this.getItem(id, null);
   }
 
-  createProduct(
-    product: CreateProductDto,
-  ): Promise<Product & Document<any, any>> {
+  createProduct(product: ProductInterface): Promise<ProductInterface> {
     return this.addItem(product);
   }
 
   updateProduct(
     id: string,
-    product: UpdateProductDto,
-  ): Query<
-    (Product & Document<any, any>) | null,
-    Product & Document<any, any>
-  > {
-    return this.updateItem(id, product);
+    product: ProductInterface,
+  ): Promise<ProductInterface> {
+    return this.updateItem(id, product, null);
   }
 
-  deleteProduct(
+  deleteProduct(id: string): Promise<ProductInterface> {
+    return this.deleteItem(id, null);
+  }
+
+  async getItems(): Promise<ProductInterface[]> {
+    try {
+      return this.productModel.find({}).exec();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
+  }
+
+  async getItem(id: string, projection: unknown): Promise<ProductInterface> {
+    try {
+      return this.productModel.findById(id).select(projection).lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
+  }
+
+  async addItem(product: ProductInterface): Promise<ProductInterface> {
+    try {
+      const newProduct = new this.productModel(product);
+      return newProduct.save();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
+  }
+
+  async updateItem(
     id: string,
-  ): Query<
-    (Product & Document<any, any>) | null,
-    Product & Document<any, any>
-  > {
-    return this.deleteItem(id);
+    product: ProductInterface,
+    projection: unknown,
+  ): Promise<ProductInterface> {
+    try {
+      return this.productModel
+        .findByIdAndUpdate(id, product)
+        .select(projection)
+        .lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 
-  private getItems(): Query<
-    (Product & Document<any, any>)[],
-    Product & Document<any, any>
-  > {
-    return this.productModel.find({});
-  }
-
-  private async getItem(
-    id: string,
-  ): Promise<(Product & Document<any, any>) | null> {
-    return this.productModel.findById(id);
-  }
-
-  private addItem(product: Product): Promise<Product & Document<any, any>> {
-    const newProduct = new this.productModel(product);
-    return newProduct.save();
-  }
-
-  private updateItem(
-    id: string,
-    product: Product,
-  ): Query<
-    (Product & Document<any, any>) | null,
-    Product & Document<any, any>
-  > {
-    return this.productModel.findByIdAndUpdate(id, product);
-  }
-
-  private deleteItem(
-    id: string,
-  ): Query<
-    (Product & Document<any, any>) | null,
-    Product & Document<any, any>
-  > {
-    return this.productModel.findByIdAndDelete(id);
+  async deleteItem(id: string, projection: unknown): Promise<ProductInterface> {
+    try {
+      return this.productModel.findByIdAndDelete(id).select(projection).lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 }

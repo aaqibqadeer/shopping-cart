@@ -1,42 +1,31 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  Session,
-} from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { Body, Controller, Get, Param, Post, Session } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Document } from 'mongoose';
-import { User } from './user.interface';
+import { UserInterface } from './user.interface';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll() {
+  findAll(): Promise<UserInterface[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  find(@Param('id') id: string): Promise<(User & Document<any, any>) | null> {
+  find(@Param('id') id: string): Promise<UserInterface> {
     return this.userService.find(id);
   }
 
   @Post('/login')
   login(
-    @Body() user: LoginDto,
-    @Session() session: Record<string, any>,
+    @Body() user: UserInterface,
+    @Session() session: Record<string, unknown>,
   ): Promise<boolean> {
     return this.userService.login(user, session);
   }
 
   @Post('/register')
-  register(@Body() user: RegisterDto): Promise<User & Document<any, any>> {
+  register(@Body() user: UserInterface): Promise<UserInterface> {
     return this.userService.register(user);
   }
 }

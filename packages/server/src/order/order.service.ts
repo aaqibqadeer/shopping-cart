@@ -14,30 +14,43 @@ export class OrderService {
     return this.getItems();
   }
 
-  find(id: string): Promise<OrderInterface> {
-    return this.getItem(id, null);
+  async find(id: string): Promise<OrderInterface> {
+    try {
+      const result = await this.getItem(id, null);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 
-  findByUserId(id: string): Promise<OrderInterface[]> {
-    return this.getItemByUserId(id, null);
+  async findByUserId(id: string) {
+    const result = await this.getItemByUserId(id);
+    if (result.length === 0) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    } else {
+      return result;
+    }
   }
 
   addOrder(order: OrderInterface): Promise<OrderInterface> {
     return this.addItem(order);
   }
 
-  private getItems(): Promise<OrderInterface[]> {
+  getItems(): Promise<OrderInterface[]> {
     try {
       return this.orderModel.find({}).exec();
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
     }
   }
 
-  private async getItem(
-    id: string,
-    projection: unknown,
-  ): Promise<OrderInterface> {
+  async getItem(id: string, projection: unknown): Promise<OrderInterface> {
     try {
       return this.orderModel.findById(id).select(projection).lean();
     } catch (error) {
@@ -47,12 +60,9 @@ export class OrderService {
     }
   }
 
-  private getItemByUserId(
-    id: string,
-    projection: unknown,
-  ): Promise<OrderInterface[]> {
+  getItemByUserId(id: string): Promise<OrderInterface[]> {
     try {
-      return this.orderModel.find({ userId: id }).projection(projection).lean();
+      return this.orderModel.find({ userId: id }).exec();
     } catch (error) {
       throw new InternalServerErrorException(
         defaultInternalServerErrorResponse,
@@ -60,12 +70,14 @@ export class OrderService {
     }
   }
 
-  private async addItem(order: OrderInterface): Promise<OrderInterface> {
+  async addItem(order: OrderInterface): Promise<OrderInterface> {
     const newOrder = new this.orderModel(order);
     try {
       return newOrder.save();
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
     }
   }
 }

@@ -8,7 +8,8 @@ import { OrderService } from './order.service';
   controllers: [CartController],
   providers: [OrderService],
   imports: [
-    MongooseModule.forFeature([{ name: 'Order', schema: orderSchema }]),
+    // MongooseModule.forFeature([{ name: 'Order', schema: orderSchema }]),
   ],
+  exports: [OrderService],
 })
 export class OrderModule {}

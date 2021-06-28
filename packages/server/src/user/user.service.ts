@@ -1,23 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Document } from 'mongoose';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-import { User } from './user.interface';
+import { Model } from 'mongoose';
+import { UserInterface } from './user.interface';
+import { defaultInternalServerErrorResponse } from '../common/errors';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<UserInterface>,
+  ) {}
 
   findAll() {
     return this.getUsers();
   }
 
-  find(id: string) {
-    return this.getUser(id);
+  find(id: string): Promise<UserInterface> {
+    return this.getUser(id, null);
   }
 
-  async login(user: LoginDto, session: Record<string, any>): Promise<boolean> {
+  async login(
+    user: UserInterface,
+    session: Record<string, any>,
+  ): Promise<boolean> {
     const result = await this.isUserExist(user.email, user.password);
     if (result) {
       session.user = user;
@@ -25,25 +29,52 @@ export class UserService {
     return result;
   }
 
-  register(user: RegisterDto): Promise<User & Document<any, any>> {
+  register(user: UserInterface): Promise<UserInterface> {
     return this.addUser(user);
   }
 
-  private addUser(user: User): Promise<User & Document<any, any>> {
-    const newUser = new this.userModel(user);
-    return newUser.save();
+  addUser(user: UserInterface): Promise<UserInterface> {
+    try {
+      const newUser = new this.userModel(user);
+      return newUser.save();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 
-  private getUsers() {
-    return this.userModel.find({}, '_id name email');
+  getUsers(): Promise<UserInterface[]> {
+    try {
+      return this.userModel.find({}, '_id name email').exec();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 
-  private async getUser(id: string) {
-    return this.userModel.findById(id, '_id name email');
+  async getUser(id: string, projection: unknown): Promise<UserInterface> {
+    try {
+      return this.userModel
+        .findById(id, '_id name email')
+        .select(projection)
+        .lean();
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 
-  private async isUserExist(email: string, password: string): Promise<boolean> {
-    const user = await this.userModel.findOne({ email: email });
-    return !!user && user.password === password;
+  async isUserExist(email?: string, password?: string): Promise<boolean> {
+    try {
+      const user = await this.userModel.findOne({ email: email });
+      return !!user && user.password === password;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        defaultInternalServerErrorResponse,
+      );
+    }
   }
 }
