@@ -20,13 +20,22 @@ export class UserService {
 
   async login(
     user: UserInterface,
-    session: Record<string, any>,
-  ): Promise<boolean> {
+    session: Record<string, unknown>,
+  ): Promise<UserInterface | null> {
     const result = await this.isUserExist(user.email, user.password);
     if (result) {
       session.user = user;
     }
     return result;
+  }
+
+  logout(session: Record<string, any>): boolean {
+    if (session.user) {
+      session.destory(() => {
+        return true;
+      });
+    }
+    return false;
   }
 
   register(user: UserInterface): Promise<UserInterface> {
@@ -67,10 +76,16 @@ export class UserService {
     }
   }
 
-  async isUserExist(email?: string, password?: string): Promise<boolean> {
+  async isUserExist(
+    email?: string,
+    password?: string,
+  ): Promise<UserInterface | null> {
     try {
       const user = await this.userModel.findOne({ email: email });
-      return !!user && user.password === password;
+      if (!!user && user.password === password) {
+        return user;
+      }
+      return null;
     } catch (error) {
       throw new InternalServerErrorException(
         defaultInternalServerErrorResponse,
