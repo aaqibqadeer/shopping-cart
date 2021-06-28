@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { LoadingContext } from "../App";
 import { SelectField, InputField, CheckoutSummary } from "../components";
 import { useHistory, useLocation } from "react-router-dom";
+import { useOrderHook } from "../utils/api/useOrderHook";
 
 export const Checkout = () => {
   const paymentOptions = [{ label: "Cash on delivery", value: "COD" }];
@@ -21,10 +23,35 @@ export const Checkout = () => {
   const [address, setAddress] = useState("");
   const [number, setNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const { updateLoading } = useContext(LoadingContext);
+  const { res, order } = useOrderHook();
+
+  useEffect(() => {
+    updateLoading(res.loading);
+    if (res.success) {
+      history.push("/order-success");
+    }
+  }, [res]);
+
+  const formatProductList = (cart) =>
+    cart.map(({ _id: productId, ...rest }) => ({ productId, ...rest }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    history.push("/order-success");
+    const userId = localStorage.getItem("userId");
+    const newOrder = {
+      userId: userId,
+      productList: formatProductList(location.state.cart),
+      checkoutDetails: {
+        fullname: name,
+        country: country,
+        address: address,
+        number: number,
+        paymentMethod: paymentMethod,
+      },
+    };
+
+    order(newOrder);
   };
 
   return (
