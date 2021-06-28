@@ -10,6 +10,7 @@ export const Signout = ({ authStatus }) => {
     let timer = setTimeout(() => {
       updateLoading(false);
       updateStatus(false);
+      localStorage.clear();
       clearTimeout(timer);
     }, 2000);
   };
