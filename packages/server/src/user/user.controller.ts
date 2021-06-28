@@ -1,16 +1,27 @@
-import { Body, Controller, Get, Param, Post, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserInterface } from './user.interface';
+import { AuthGuard } from '../common/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll(): Promise<UserInterface[]> {
     return this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   find(@Param('id') id: string): Promise<UserInterface> {
     return this.userService.find(id);
