@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserInterface } from './user.interface';
 import { defaultInternalServerErrorResponse } from '../common/errors';
+import { genSalt, hash, compare } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -38,8 +39,17 @@ export class UserService {
     return false;
   }
 
-  register(user: UserInterface): Promise<UserInterface> {
+  async register(user: UserInterface): Promise<UserInterface> {
+    const password = user.password ? user.password : '';
+
+    const hash = await this.hashPassword(password);
+    user.password = hash;
+
     return this.addUser(user);
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    return hash(password, 10);
   }
 
   addUser(user: UserInterface): Promise<UserInterface> {
@@ -55,7 +65,7 @@ export class UserService {
 
   getUsers(): Promise<UserInterface[]> {
     try {
-      return this.userModel.find({}, '_id name email').exec();
+      return this.userModel.find({}, '_id name email password').exec();
     } catch (error) {
       throw new InternalServerErrorException(
         defaultInternalServerErrorResponse,
@@ -77,12 +87,14 @@ export class UserService {
   }
 
   async isUserExist(
-    email?: string,
-    password?: string,
+    enteredEmail: string,
+    enteredPassword: string,
   ): Promise<UserInterface | null> {
     try {
-      const user = await this.userModel.findOne({ email: email });
-      if (!!user && user.password === password) {
+      const user = await this.userModel.findOne({ email: enteredEmail });
+      const userPassword = user?.password ? user.password : ' ';
+      const isPasswordSame = await compare(enteredPassword, userPassword);
+      if (!!user && isPasswordSame) {
         return user;
       }
       return null;
