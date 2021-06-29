@@ -2,27 +2,26 @@ import { useCallback, useState } from "react";
 import { api } from "./api";
 
 export const useProductsHook = () => {
-  const [products, setProducts] = useState({});
   const [res, setRes] = useState({
     success: false,
     loading: false,
     status: null,
+    products: [],
   });
   const getProducts = useCallback(async () => {
-    setRes({ success: false, loading: true, status: null });
+    setRes({ success: false, loading: true, status: null, products: [] });
     try {
       const response = await api.get("/product");
-      setProducts(response.data);
       setRes({
         success: true,
         loading: false,
-        // status: response.status,
+        status: response ? response.status : null,
+        products: response.data,
       });
     } catch (error) {
-      setProducts({});
-      setRes({ success: false, loading: false, status: null });
+      setRes({ success: false, loading: false, status: null, products: [] });
     }
   }, []);
 
-  return { res, getProducts, products };
+  return { res, getProducts };
 };

@@ -4,15 +4,15 @@ import { useProductsHook } from "../utils/api";
 import { Overlay } from "../AppStyle.jsx";
 
 export const Products = () => {
-  const { res, getProducts, products } = useProductsHook();
+  const { res, getProducts } = useProductsHook();
 
   useEffect(() => {
     getProducts();
   }, []);
 
   const ProductList = () =>
-    products
-      ? products.map((product) => (
+    res.products
+      ? res.products.map((product) => (
           <Product product={product} key={product._id} id={product._id} />
         ))
       : null;
@@ -29,8 +29,8 @@ export const Products = () => {
       {!res.loading && (
         <div className="container">
           <div className="row scroll">
-            {products.length > 0 && <ProductList />}
-            {products.length === 0 && <NoProduct />}
+            {res.products.length > 0 && <ProductList />}
+            {res.products.length === 0 && <NoProduct />}
           </div>
         </div>
       )}

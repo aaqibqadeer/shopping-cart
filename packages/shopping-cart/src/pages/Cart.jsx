@@ -19,7 +19,7 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
     "Remove",
   ];
 
-  const { res, getProducts, products } = useProductsHook();
+  const { res, getProducts } = useProductsHook();
   const [cartList, setCartList] = useState([]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
       }));
       setCartList(tempCart);
     }
-  }, [cart, products]);
+  }, [cart, res]);
 
   const history = useHistory();
 
@@ -45,10 +45,10 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
       </th>
     ));
 
-  const isProductEmpty = () => Object.keys(products).length === 0;
+  const isProductEmpty = () => res.products.length === 0;
 
   const getProductInfo = (_id) =>
-    products.find((product) => product._id === _id);
+    res.products.find((product) => product._id === _id);
 
   const handleQuantity = (quantity, _id) => {
     const updatedCart = [...cart];
@@ -57,8 +57,8 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
     updateCart(updatedCart);
   };
 
-  const handleRemove = (_id) => {
-    const updatedCart = cart.filter((item) => item._id !== _id);
+  const handleRemove = (id) => {
+    const updatedCart = cart.filter((item) => item._id !== id);
     updateCart(updatedCart);
   };
 
@@ -71,16 +71,14 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
       });
     } else {
       let price = 0;
-      if (cart.length > 0) {
-        cart.forEach((item) => {
-          const product = getProductInfo(item._id);
-          price += product.price * item.quantity;
-        });
-        history.push({
-          pathname: "/checkout",
-          state: { subtotal: price, cart: cart },
-        });
-      }
+      cart.forEach((item) => {
+        const product = getProductInfo(item._id);
+        price += product.price * item.quantity;
+      });
+      history.push({
+        pathname: "/checkout",
+        state: { subtotal: price, cart },
+      });
     }
   };
 
