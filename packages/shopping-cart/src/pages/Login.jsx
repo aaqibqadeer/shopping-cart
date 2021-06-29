@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { InputField } from "../components";
-import { withAuth } from "../store";
+import { withAuth, withUser } from "../store";
 import { useLoginHook } from "../utils/api";
 import { Overlay } from "../AppStyle.jsx";
+import { combineHOCs } from "../helper";
 
-export const Login = withAuth(({ authStatus, setAuthStatus }) => {
+const withHocs = combineHOCs(withAuth, withUser);
+
+export const Login = withHocs(({ authStatus, setAuthStatus, setUser }) => {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +22,8 @@ export const Login = withAuth(({ authStatus, setAuthStatus }) => {
 
   useEffect(() => {
     setAuthStatus(res.success);
-  }, [res, setAuthStatus]);
+    setUser(res.user);
+  }, [res, setAuthStatus, setUser]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

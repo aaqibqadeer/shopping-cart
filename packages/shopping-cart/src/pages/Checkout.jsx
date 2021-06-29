@@ -3,8 +3,9 @@ import { SelectField, InputField, CheckoutSummary } from "../components";
 import { useHistory, useLocation } from "react-router-dom";
 import { useOrderHook } from "../utils/api/useOrderHook";
 import { Overlay } from "../AppStyle.jsx";
+import { withUser } from "../store";
 
-export const Checkout = () => {
+export const Checkout = withUser(({ user }) => {
   const paymentOptions = [{ label: "Cash on delivery", value: "COD" }];
 
   const countries = [
@@ -36,9 +37,8 @@ export const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userId = localStorage.getItem("userId");
     const newOrder = {
-      userId,
+      userId: user._id,
       productList: formatProductList(location.state.cart),
       checkoutDetails: {
         fullname: name,
@@ -124,4 +124,4 @@ export const Checkout = () => {
       )}
     </div>
   );
-};
+});

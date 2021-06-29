@@ -6,6 +6,11 @@ export const useLoginHook = () => {
     success: false,
     loading: false,
     status: null,
+    user: {
+      _id: "",
+      name: "",
+      email: "",
+    },
   });
 
   const login = useCallback(async (payload) => {
@@ -13,6 +18,11 @@ export const useLoginHook = () => {
       success: false,
       loading: true,
       status: null,
+      user: {
+        _id: "",
+        name: "",
+        email: "",
+      },
     });
 
     try {
@@ -22,12 +32,18 @@ export const useLoginHook = () => {
         success: true,
         loading: false,
         status: response.status,
+        user: response.data,
       });
     } catch (error) {
       setRes({
         success: false,
         loading: false,
         status: error.response ? error.response.status : 500,
+        user: {
+          _id: "",
+          name: "",
+          email: "",
+        },
       });
     }
   }, []);
