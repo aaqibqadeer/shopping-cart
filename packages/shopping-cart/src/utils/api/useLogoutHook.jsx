@@ -12,6 +12,7 @@ export const useLogoutHook = () => {
     setRes({ success: false, loading: true, status: null });
     try {
       const response = await api.delete("/user/logout");
+      localStorage.clear();
       setRes({ success: true, loading: false, status: 200 });
     } catch (error) {
       setRes({ success: false, loading: false, status: error.response.status });

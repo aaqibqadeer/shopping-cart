@@ -1,36 +1,29 @@
-import { combineHOCs } from "../helper";
-import { withAuth, withLoading } from "../store";
+import { useEffect } from "react";
+import { withAuth } from "../store";
 import { Overlay } from "../AppStyle.jsx";
+import { useLogoutHook } from "../utils/api";
 
-const withHocs = combineHOCs(withAuth, withLoading);
+export const Signout = withAuth(({ authStatus, setAuthStatus }) => {
+  const { res, logout } = useLogoutHook();
 
-export const Signout = withHocs(
-  ({ authStatus, setIsLoading, isLoading, setAuthStatus }) => {
-    const logout = () => {
-      setIsLoading(true);
-      let timer = setTimeout(() => {
-        setIsLoading(false);
-        setAuthStatus(false);
-        localStorage.clear();
-        clearTimeout(timer);
-      }, 2000);
-    };
+  useEffect(() => {
+    setAuthStatus(!res.success);
+  }, [res]);
 
-    return (
-      <>
-        {isLoading && (
-          <Overlay>
-            <div className="d-flex justify-content-center">
-              <div className="spinner-border m-5 p-5" role="status"></div>
-            </div>
-          </Overlay>
-        )}
-        {authStatus && (
-          <button onClick={logout} className="btn btn-primary mx-2">
-            Sign out
-          </button>
-        )}
-      </>
-    );
-  }
-);
+  return (
+    <>
+      {res.loading && (
+        <Overlay>
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border m-5 p-5" role="status"></div>
+          </div>
+        </Overlay>
+      )}
+      {!res.loading && authStatus && (
+        <button onClick={logout} className="btn btn-primary mx-2">
+          Sign out
+        </button>
+      )}
+    </>
+  );
+});
