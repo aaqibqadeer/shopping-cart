@@ -1,12 +1,13 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { AuthContext, LoadingContext } from "../App";
 import { InputField } from "../components";
+import { combineHOCs } from "../helper";
+import { withAuth, withLoading } from "../store";
 import { useLoginHook } from "../utils/api";
 
-export const Login = () => {
-  const { authStatus, updateStatus } = useContext(AuthContext);
-  const { updateLoading } = useContext(LoadingContext);
+const withHocs = combineHOCs(withAuth, withLoading);
+
+export const Login = withHocs(({ authStatus, setAuthStatus, setIsLoading }) => {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,9 +20,9 @@ export const Login = () => {
   }, [authStatus, history]);
 
   useEffect(() => {
-    updateStatus(res.success);
-    updateLoading(res.loading);
-  }, [res, updateStatus, updateLoading]);
+    setAuthStatus(res.success);
+    setIsLoading(res.loading);
+  }, [res, setAuthStatus, setIsLoading]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,4 +60,4 @@ export const Login = () => {
       </form>
     </div>
   );
-};
+});

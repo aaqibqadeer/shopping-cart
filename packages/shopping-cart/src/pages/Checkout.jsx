@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from "react";
-import { LoadingContext } from "../App";
+import { useState, useEffect } from "react";
 import { SelectField, InputField, CheckoutSummary } from "../components";
 import { useHistory, useLocation } from "react-router-dom";
 import { useOrderHook } from "../utils/api/useOrderHook";
+import { withLoading } from "../store";
 
-export const Checkout = () => {
+export const Checkout = withLoading(({ setIsLoading }) => {
   const paymentOptions = [{ label: "Cash on delivery", value: "COD" }];
 
   const countries = [
@@ -23,11 +23,10 @@ export const Checkout = () => {
   const [address, setAddress] = useState("");
   const [number, setNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("COD");
-  const { updateLoading } = useContext(LoadingContext);
   const { res, order } = useOrderHook();
 
   useEffect(() => {
-    updateLoading(res.loading);
+    setIsLoading(res.loading);
     if (res.success) {
       history.push("/order-success");
     }
@@ -40,14 +39,14 @@ export const Checkout = () => {
     e.preventDefault();
     const userId = localStorage.getItem("userId");
     const newOrder = {
-      userId: userId,
+      userId,
       productList: formatProductList(location.state.cart),
       checkoutDetails: {
         fullname: name,
-        country: country,
-        address: address,
-        number: number,
-        paymentMethod: paymentMethod,
+        country,
+        address,
+        number,
+        paymentMethod,
       },
     };
 
@@ -117,4 +116,4 @@ export const Checkout = () => {
       </div>
     </div>
   );
-};
+});

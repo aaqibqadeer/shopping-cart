@@ -1,13 +1,12 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext, CartContext } from "../App";
 import { Links, Signout } from "./";
 import "../style/css/Header.css";
+import { withAuth, withCart } from "../store";
+import { combineHOCs } from "../helper";
 
-export const Header = () => {
-  const { cart } = useContext(CartContext);
-  const { authStatus } = useContext(AuthContext);
+const withHocs = combineHOCs(withCart, withAuth);
 
+export const Header = withHocs(({ cart, authStatus }) => {
   const links = [
     { text: "Home", to: "/" },
     { text: "Products", to: "/products" },
@@ -35,8 +34,8 @@ export const Header = () => {
             Sign In
           </Link>
         )}
-        <Signout authStatus={authStatus} />
+        <Signout />
       </div>
     </nav>
   );
-};
+});

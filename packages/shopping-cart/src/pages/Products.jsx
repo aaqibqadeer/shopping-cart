@@ -1,16 +1,17 @@
-import { useContext, useEffect } from "react";
-import { AuthContext, LoadingContext } from "../App";
+import { useEffect } from "react";
 import { Product, NoProduct } from "../components";
+import { combineHOCs } from "../helper";
+import { withAuth, withLoading } from "../store";
 import { useProductsHook } from "../utils/api";
 
-export const Products = () => {
-  const { authStatus } = useContext(AuthContext);
-  const { updateLoading } = useContext(LoadingContext);
+const withHocs = combineHOCs(withAuth, withLoading);
+
+export const Products = withHocs(({ authStatus, setIsLoading }) => {
   const { res, getProducts, products } = useProductsHook();
 
   useEffect(() => {
-    updateLoading(res.loading);
-  }, [res, updateLoading]);
+    setIsLoading(res.loading);
+  }, [res, setIsLoading]);
 
   useEffect(() => {
     getProducts();
@@ -19,12 +20,7 @@ export const Products = () => {
   const ProductList = () =>
     products
       ? products.map((product) => (
-          <Product
-            product={product}
-            key={product._id}
-            id={product._id}
-            authStatus={authStatus}
-          />
+          <Product product={product} key={product._id} id={product._id} />
         ))
       : null;
 
@@ -36,4 +32,4 @@ export const Products = () => {
       </div>
     </div>
   );
-};
+});

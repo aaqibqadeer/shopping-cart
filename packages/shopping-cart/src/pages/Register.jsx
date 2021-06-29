@@ -1,12 +1,13 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { InputField } from "../components";
-import { AuthContext, UsersContext, LoadingContext } from "../App";
 import { useRegisterHook } from "../utils/api/useRegisterHook";
+import { combineHOCs } from "../helper";
+import { withAuth, withLoading } from "../store";
 
-export const Register = () => {
-  const { updateLoading } = useContext(LoadingContext);
-  const { authStatus } = useContext(AuthContext);
+const withHocs = combineHOCs(withAuth, withLoading);
+
+export const Register = withHocs(({ authStatus, setIsLoading }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +23,8 @@ export const Register = () => {
   }, []);
 
   useEffect(() => {
-    updateLoading(res.loading);
-  }, [res, updateLoading]);
+    setIsLoading(res.loading);
+  }, [res, setIsLoading]);
 
   const validUser = () => password === confirmPassword;
 
@@ -81,4 +82,4 @@ export const Register = () => {
       </form>
     </div>
   );
-};
+});
