@@ -27,7 +27,7 @@ export const useLoginHook = () => {
       setRes({
         success: false,
         loading: false,
-        status: error.response.status,
+        status: error.response ? error.response.status : 500,
       });
     }
   }, []);

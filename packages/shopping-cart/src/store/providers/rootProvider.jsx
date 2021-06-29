@@ -1,6 +1,6 @@
-import { LoadingProvider, AuthProvider, CartProvider } from "./";
+import { AuthProvider, CartProvider } from "./";
 
-const Providers = [LoadingProvider, AuthProvider, CartProvider];
+const Providers = [AuthProvider, CartProvider];
 
 export const RootProvider = ({ children }) => {
   Providers.forEach((Provider) => {
