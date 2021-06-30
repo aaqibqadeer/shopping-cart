@@ -8,7 +8,7 @@ export const Home = () => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   const ProductList = () =>
     res.products

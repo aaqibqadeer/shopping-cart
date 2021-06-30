@@ -18,7 +18,7 @@ export const Register = withAuth(({ authStatus }) => {
     if (authStatus) {
       history.replace("/");
     }
-  }, []);
+  }, [history, authStatus]);
 
   const validUser = () => password === confirmPassword;
 

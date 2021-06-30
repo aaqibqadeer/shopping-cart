@@ -16,6 +16,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
+  @Get('/me')
+  rememberMe(
+    @Session() session: Record<string, unknown>,
+  ): UserInterface | null {
+    return this.userService.rememberMe(session);
+  }
+
+  @UseGuards(AuthGuard)
   @Get()
   findAll(): Promise<UserInterface[]> {
     return this.userService.findAll();

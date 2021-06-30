@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../components";
 import { TableWrapper } from "../style/CartStyle";
@@ -22,9 +22,19 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
   const { res, getProducts } = useProductsHook();
   const [cartList, setCartList] = useState([]);
 
+  const isProductEmpty = useCallback(
+    () => res.products.length === 0,
+    [res.products]
+  );
+
+  const getProductInfo = useCallback(
+    (_id) => res.products.find((product) => product._id === _id),
+    [res.products]
+  );
+
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
   useEffect(() => {
     if (cart.length > 0 && !isProductEmpty()) {
@@ -34,7 +44,7 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
       }));
       setCartList(tempCart);
     }
-  }, [cart, res]);
+  }, [cart, getProductInfo, isProductEmpty]);
 
   const history = useHistory();
 
@@ -44,11 +54,6 @@ export const Cart = withHocs(({ authStatus, cart, updateCart }) => {
         {header}
       </th>
     ));
-
-  const isProductEmpty = () => res.products.length === 0;
-
-  const getProductInfo = (_id) =>
-    res.products.find((product) => product._id === _id);
 
   const handleQuantity = (quantity, _id) => {
     const updatedCart = [...cart];

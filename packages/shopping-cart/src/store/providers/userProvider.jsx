@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UserContext } from "../context";
 
-export const CartProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
     _id: "",
     name: "",

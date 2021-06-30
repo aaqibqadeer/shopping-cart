@@ -8,7 +8,7 @@ export const Signout = withAuth(({ authStatus, setAuthStatus }) => {
 
   useEffect(() => {
     setAuthStatus(!res.success);
-  }, [res]);
+  }, [res, setAuthStatus]);
 
   return (
     <>

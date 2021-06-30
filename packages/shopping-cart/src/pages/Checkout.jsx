@@ -30,7 +30,7 @@ export const Checkout = withUser(({ user }) => {
     if (res.success) {
       history.push("/order-success");
     }
-  }, [res]);
+  }, [res, history]);
 
   const formatProductList = (cart) =>
     cart.map(({ _id: productId, ...rest }) => ({ productId, ...rest }));
