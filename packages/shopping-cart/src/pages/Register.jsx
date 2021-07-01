@@ -20,6 +20,13 @@ export const Register = withAuth(({ authStatus }) => {
     }
   }, [history, authStatus]);
 
+  useEffect(() => {
+    if (res.success) {
+      alert("Account created successfully!");
+      history.replace("/login");
+    }
+  }, [res, history]);
+
   const validUser = () => password === confirmPassword;
 
   const handleSubmit = (event) => {

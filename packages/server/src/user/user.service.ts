@@ -12,11 +12,7 @@ export class UserService {
   ) {}
 
   rememberMe(session: Record<string, any>): UserInterface | null {
-    if (session.user) {
-      return session.user;
-    } else {
-      return null;
-    }
+    return session.user;
   }
 
   findAll() {
@@ -33,16 +29,15 @@ export class UserService {
   ): Promise<UserInterface | null> {
     const result = await this.isUserExist(user.email, user.password);
     if (result) {
-      session.user = user;
+      session.user = result;
     }
     return result;
   }
 
   logout(session: Record<string, any>): boolean {
     if (session.user) {
-      session.destory(() => {
-        return true;
-      });
+      session.user = null;
+      return true;
     }
     return false;
   }

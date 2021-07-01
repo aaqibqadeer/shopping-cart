@@ -14,7 +14,7 @@ export const Header = withHocs(
 
     useEffect(() => {
       fetchUser();
-    }, []);
+    }, [fetchUser]);
 
     useEffect(() => {
       setAuthStatus(res.success);
