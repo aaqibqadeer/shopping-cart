@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -31,12 +32,17 @@ export class UserController {
   login(
     @Body() user: UserInterface,
     @Session() session: Record<string, unknown>,
-  ): Promise<boolean> {
+  ): Promise<UserInterface | null> {
     return this.userService.login(user, session);
   }
 
   @Post('/register')
   register(@Body() user: UserInterface): Promise<UserInterface> {
     return this.userService.register(user);
+  }
+
+  @Delete('/logout')
+  logout(@Session() session: Record<string, unknown>): boolean {
+    return this.userService.logout(session);
   }
 }
