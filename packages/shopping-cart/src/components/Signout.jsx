@@ -1,26 +1,29 @@
-import { useContext } from "react";
-import { LoadingContext, AuthContext } from "../App";
+import { useEffect } from "react";
+import { withAuth } from "../store";
+import { Overlay } from "../AppStyle.jsx";
+import { useLogoutHook } from "../utils/api";
 
-export const Signout = ({ authStatus }) => {
-  const { updateLoading } = useContext(LoadingContext);
-  const { updateStatus } = useContext(AuthContext);
+export const Signout = withAuth(({ authStatus, setAuthStatus }) => {
+  const { res, logout } = useLogoutHook();
 
-  const logout = () => {
-    updateLoading(true);
-    let timer = setTimeout(() => {
-      updateLoading(false);
-      updateStatus(false);
-      clearTimeout(timer);
-    }, 2000);
-  };
+  useEffect(() => {
+    setAuthStatus(!res.success);
+  }, [res, setAuthStatus]);
 
   return (
     <>
-      {authStatus && (
+      {res.loading && (
+        <Overlay>
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border m-5 p-5" role="status"></div>
+          </div>
+        </Overlay>
+      )}
+      {!res.loading && authStatus && (
         <button onClick={logout} className="btn btn-primary mx-2">
           Sign out
         </button>
       )}
     </>
   );
-};
+});

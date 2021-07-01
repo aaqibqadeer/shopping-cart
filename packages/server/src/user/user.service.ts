@@ -11,6 +11,14 @@ export class UserService {
     @InjectModel('User') private readonly userModel: Model<UserInterface>,
   ) {}
 
+  rememberMe(session: Record<string, any>): UserInterface | null {
+    if (session.user) {
+      return session.user;
+    } else {
+      return null;
+    }
+  }
+
   findAll() {
     return this.getUsers();
   }
